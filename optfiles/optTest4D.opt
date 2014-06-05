@@ -1,0 +1,14 @@
+// Which .proj file would we have loaded if we were just running a
+// simple execution of gpuPlume?  This is the file that will be used to
+// build up the variable parameters and projects.
+BaseProjectPath UrbanOpt/Simple4x4TestCase/BaseProject_inner
+
+// Wind information - right now, it's fairly simple with only the wind
+// angles being specified.  However, I'm working in support to handle
+// a more comprehensive set of wind parameters.
+// WindRange <min> <max> <step size>
+WindRange 0.0 360.0 22.5
+
+// BuildingLoc <id> <min_xfo> <min_yfo> <max_xfo> <max_yfo>
+BuildingLoc 3 29.0 52.0 33.0 56.0
+BuildingLoc 1 30.0 35.0 34.0 39.0

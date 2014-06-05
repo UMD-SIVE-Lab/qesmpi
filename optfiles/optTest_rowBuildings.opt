@@ -1,0 +1,31 @@
+// Which .proj file would we have loaded if we were just running a 
+// simple execution of gpuPlume? This is the file that will be used to 
+// build up the variable parameters and projects. 
+BaseProjectPath UrbanOpt/rowBuildings/rowBuildings_inner 
+
+// You can specify the solver and it's various parameters through the 
+// following line. Note that the parameters vary based on the solver 
+// that is used. 
+// 
+// Examples: 
+// The brute force solver can be selected with the following: 
+// Solver BruteForce 
+
+// The genetic algorithm Sampling Importance Resampling (SIR) can be specified with the following: 
+// Solver SIR 
+
+Solver SIR 5 2.25 2.0 
+
+// Solver BruteForce 
+
+// Wind information - right now, it is fairly simple with only the wind 
+// angles being specified. However, I am working in support to handle 
+// a more comprehensive set of wind parameters. 
+// WindRange 
+WindRange 270.0 360.0 362.5 
+
+// namedParam min max 
+// BuildingLoc 
+BuildingLoc 2 47.0 25.0 53.0 25.0 
+BuildingLoc 4 87.0 25.0 93.0 25.0 
+

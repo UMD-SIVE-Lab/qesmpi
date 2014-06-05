@@ -1,0 +1,15 @@
+
+BaseProjectPath = ../quicdata/2by2_q572_270/2by2_q572_270_inner            ////should write this 
+
+Solver = BruteForce
+//dummy = [1:1:100]
+seed = 9999
+quBuildings.buildings[0].xfo = 23
+quBuildings.buildings[0].yfo = [37.0:1.0:40.0]
+quBuildings.buildings[1].xfo = [37.0:1.0:40.0]
+quBuildings.buildings[1].yfo = [37.0:1.0:40.0]
+quBuildings.buildings[2].xfo = [37.0:1.0:40.0]
+quBuildings.buildings[2].yfo = [20.0:1.0:23.0]
+quBuildings.buildings[3].xfo = [20.0:1.0:23.0]
+quBuildings.buildings[3].yfo = [20.0:1.0:23.0]
+fitness = norm2
