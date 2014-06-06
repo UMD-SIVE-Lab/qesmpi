@@ -31,6 +31,23 @@ master::~master()
 
 }
 
+population master::get_population(std::string optimizationFile)
+{
+    readOptimizationMetaFile(optimizationFile);
+    long numDimensions = minValues.size();
+    vector< int > steps(numDimensions);
+    for (unsigned int i = 0; i < numDimensions; i++)
+    {
+        steps[i] = (((int)maxValues[i] - (int)minValues[i]) / (int)stepValues[i]) + 1;  // (int)maxValues[i] - (int)minValues[i] + 1;
+        std::cout << "setting steps to " << steps[i] << std::endl;
+    }
+
+    populationGenerator popgen(minValues, maxValues, steps, setValues);
+
+    return popgen.generate_all_pop();
+
+}
+
 dependencyOptParam *master::lookupDataInDependencyMap(unsigned int idx)
 {
     if (idx >= 0 && idx < dependencyOptMap.size())
@@ -331,7 +348,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
                 if (solver_name.compare("BruteForce") == 0 || solver_name.compare("bruteforce") == 0)
                     use_BruteForceSolver = true;
 
-                std::cout << "the value of the solver is " << solver_name << "\n" << "the flag for bf is :" << use_BruteForceSolver << "\n";
+                std::cout << "the value of the solver is " << solver_name ;//<< "\n" << "the flag for bf is :" << use_BruteForceSolver << "\n";
 
 
 
@@ -369,7 +386,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
                 int temp_test;//this for temporarily renaming the files :
                 stringstream a;
                 a.str(value);
-                std::cerr << "this is the seed" << std::endl;
+                //std::cerr << "this is the seed" << std::endl;
                 //std::cin>>temp_test;
                 a >> seednumber;
                 // std::cin>>temp_test;
@@ -492,7 +509,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
                 /////now to check what the value is if it is range or etc
                 //changing the way we check for ranges.
 
-                std::cout << "the else case and the variable_name = " << variable_name << std::endl;
+                //std::cout << "the else case and the variable_name = " << variable_name << std::endl;
                 // if(value.find("[")!=std::string::npos)          ///range
                 if (value[0] == '[')        ///todo if this works or not
                 {
@@ -687,11 +704,6 @@ void master::readOptimizationMetaFile(const std::string &filename)
 
                 }
 
-
-
-
-
-
             }
 
 
@@ -717,7 +729,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
 
 
 
-    std::cout << "should print the vector values" << rangeOptMap.size() << std::endl;
+    std::cout << "Range map values: " << rangeOptMap.size() << std::endl;
 
     std::vector<namedOptParam>::iterator  x;
     // for (unsigned int wIdx=0; wIdx<windAngle.size(); wIdx++)
@@ -732,8 +744,11 @@ void master::readOptimizationMetaFile(const std::string &filename)
 
     }
 
-    std::cout << "Solver Parameters -------------------" << std::endl;
-
+    std::cout << "-------------------Solver Parameters -------------------" << std::endl;
+    if (solverOptMap.size() == 0)
+    {
+        std::cout << "**NONE" << std::endl;
+    }
     for (x = solverOptMap.begin(); x != solverOptMap.end(); x++)
     {
 
@@ -746,6 +761,12 @@ void master::readOptimizationMetaFile(const std::string &filename)
     //printOptimizationParams( minValues,maxValues,stepValues,setValues,singleValues);
 
     ///write a function that will print everything with the correct names "
+
+    /**
+        might wan to look at this sometime in future
+
+    **/
+
 
     if (use_Population)
     {

@@ -80,8 +80,8 @@ int main(int argc, char  *argv[])
 
 
     master rias;
-    rias.readOptimizationMetaFile(optimizationFile);
-    //rias.get_population(optimizationFile);
+    population pop = rias.get_population(optimizationFile);
+    pop.print();
 
     return 0;
 }

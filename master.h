@@ -13,6 +13,7 @@
 #include "namedOptParam.h"
 #include "dependencyOptParam.h"
 #include "FitnessCache.h"
+#include "samples.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ namespace sivelab
         public:
             master();
             ~master();
-            void readOptimizationMetaFile(const std::string &filename);
+            population get_population(std::string optimizationFile);
             void printOptimizationParams( std::vector<double> &minValues,
                                           std::vector<double> &maxValues,
                                           std::vector<double> &stepValues,
@@ -70,7 +71,7 @@ namespace sivelab
             bool isNumeric(std::string value);
             namedOptParam *lookupDataInMapFromSampleIndex(unsigned int idx);
             dependencyOptParam *lookupDataInDependencyMap(unsigned int idx);
-
+            void readOptimizationMetaFile(const std::string &filename);
     };
 }
 
