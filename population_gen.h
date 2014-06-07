@@ -8,36 +8,44 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-class populationGenerator
+
+#include "logger/logger.h"
+
+using namespace sivelab;
+
+namespace sivelab
 {
+    class populationGenerator
+    {
 
-        int dimensions ; ///total number of dimensions being handled
-        int total_population_size;   ///total number of possible samples// i.e for bruteforce
-        vector< double > min_domain;
-        vector< double > max_domain;
-        vector< int > steps;
-        vector <vector<double> > setValues;
-        population entire_pop;
-        population generate_entire_pop();
-        int generate_entire_array(double *&);
-    public:
+            int dimensions ; ///total number of dimensions being handled
+            int total_population_size;   ///total number of possible samples// i.e for bruteforce
+            vector< double > min_domain;
+            vector< double > max_domain;
+            vector< int > steps;
+            vector <vector<double> > setValues;
+            population entire_pop;
+            population generate_entire_pop();
+            int generate_entire_array(double *&);
+        public:
+            logger log;
+            populationGenerator(vector <double> min_domain_ , vector<double> max_domain_ , vector<int> steps_, vector <vector<double > > setvalues_); //check later
+            populationGenerator(population full_pop_);
+            populationGenerator() {};
 
-        populationGenerator(vector <double> min_domain_ , vector<double> max_domain_ , vector<int> steps_, vector <vector<double > > setvalues_); //check later
-        populationGenerator(population full_pop_);
-        populationGenerator() {};
+            population generate_fromfile(std::string fileName, std::vector <namedOptParam> &);
+            population generate_all_pop();
+            int  generate_all_array(double []);
+            population  generate_random_pop_usingentire(int number);
+            int generate_random_array_usingentire(double [], int number);
+            population generate_random_pop(int number);
+            int generate_random_array(double [], int number);
 
-        population generate_fromfile(std::string fileName, std::vector <namedOptParam> &);
-        population generate_all_pop();
-        int  generate_all_array(double []);
-        population  generate_random_pop_usingentire(int number);
-        int generate_random_array_usingentire(double [], int number);
-        population generate_random_pop(int number);
-        int generate_random_array(double [], int number);
+            population normalize_bounds(double par[], int popsize); //should make user all the values are withing the required range :
+            double normalize_value(double value, int sample_index); ///this will normalize the value to the value within the given range and step size even for a single value
 
-        population normalize_bounds(double par[], int popsize); //should make user all the values are withing the required range :
-        double normalize_value(double value, int sample_index); ///this will normalize the value to the value within the given range and step size even for a single value
-
-};
+    };
+}
 /*populationGenerator popgen(minValues,maxValues,steps,setValues);
 
  population temp_all = popgen.generate_all_pop();

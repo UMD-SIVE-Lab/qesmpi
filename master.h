@@ -14,8 +14,11 @@
 #include "dependencyOptParam.h"
 #include "FitnessCache.h"
 #include "samples.h"
+#include "logger/logger.h"
 
 using namespace std;
+using namespace sivelab;
+
 
 namespace sivelab
 {
@@ -31,6 +34,7 @@ namespace sivelab
                                           std::vector<vector<double> > &setValues,
                                           std::vector<std::string> &singleValues);
         private:
+            logger log;
 
             bool use_BruteForceSolver;
             bool useTimeStepSet;

@@ -17,6 +17,7 @@ using namespace sivelab;
 
 master::master()
 {
+    log = logger(ERROR, "master");
     use_BruteForceSolver = false;
     useTimeStepSet = false;
     useNumParticleSet = false;
@@ -39,7 +40,7 @@ population master::get_population(std::string optimizationFile)
     for (unsigned int i = 0; i < numDimensions; i++)
     {
         steps[i] = (((int)maxValues[i] - (int)minValues[i]) / (int)stepValues[i]) + 1;  // (int)maxValues[i] - (int)minValues[i] + 1;
-        std::cout << "setting steps to " << steps[i] << std::endl;
+        log.debug("setting steps to ", steps[i]);
     }
 
     populationGenerator popgen(minValues, maxValues, steps, setValues);
@@ -271,7 +272,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
     timeStepSet.clear();
     setValues.clear();
 
-    std::cout << "Parsing optimization file: " << filename << "..." << std::endl;
+    log.debug("Parsing optimization file: ", filename );
 
     //
     // open the file and load into string array
@@ -279,7 +280,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
     std::ifstream opt_file( filename.c_str() );
     if (opt_file.is_open() == false)
     {
-        std::cerr << "Error opening file \"" << filename << "\".  Exiting." << std::endl;
+        log.error("Error opening file \"", filename , "\".  Exiting." );
         exit(1);
     }
 
@@ -337,7 +338,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
             {
 
                 BASEPROJ_INNER_PATH = value;
-                std::cout << "Using " << BASEPROJ_INNER_PATH << " as project source directory." << std::endl;
+                log.debug("Using ", BASEPROJ_INNER_PATH, " as project source directory.");
 
             }
             else if (variable_name.compare("Solver") == 0 || variable_name.compare("SOLVER") == 0 || variable_name.compare("solver") == 0)                 ////TODO:make sure to write code for solvers
@@ -348,7 +349,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
                 if (solver_name.compare("BruteForce") == 0 || solver_name.compare("bruteforce") == 0)
                     use_BruteForceSolver = true;
 
-                std::cout << "the value of the solver is " << solver_name ;//<< "\n" << "the flag for bf is :" << use_BruteForceSolver << "\n";
+                log.debug("the value of the solver is ", solver_name) ;//<< "\n" << "the flag for bf is :" << use_BruteForceSolver << "\n";
 
 
 
@@ -729,7 +730,7 @@ void master::readOptimizationMetaFile(const std::string &filename)
 
 
 
-    std::cout << "Range map values: " << rangeOptMap.size() << std::endl;
+    log.debug("Range map values: ", rangeOptMap.size());
 
     std::vector<namedOptParam>::iterator  x;
     // for (unsigned int wIdx=0; wIdx<windAngle.size(); wIdx++)
@@ -738,21 +739,21 @@ void master::readOptimizationMetaFile(const std::string &filename)
     for (x = rangeOptMap.begin(); x != rangeOptMap.end(); x++)
     {
 
-        std::cout << (*x).description << std::endl;
-        std::cout << "min : step : max " << minValues[temp1] << "  " << stepValues[temp1] << "  " << maxValues[temp1] << std::endl;
+        log.debug((*x).description);
+        log.debug("min : step : max ", minValues[temp1], "  ", stepValues[temp1], "  ", maxValues[temp1]);
         temp1++;
 
     }
 
-    std::cout << "-------------------Solver Parameters -------------------" << std::endl;
+    log.debug("-------------------Solver Parameters -------------------");
     if (solverOptMap.size() == 0)
     {
-        std::cout << "**NONE" << std::endl;
+        log.debug("**NONE");
     }
     for (x = solverOptMap.begin(); x != solverOptMap.end(); x++)
     {
 
-        std::cout << (*x).description << "\t=" << (*x).value << std::endl;
+        log.debug((*x).description, "\t=", (*x).value);
 
     }
 

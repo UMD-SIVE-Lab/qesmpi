@@ -8,14 +8,14 @@ populationGenerator::populationGenerator(population full_pop_)
 populationGenerator::populationGenerator(vector <double> min_domain_ , vector<double> max_domain_ , vector<int> steps_, vector <vector<double > > setvalues_)
 {
 
+    log = logger(ERROR, "populationGenerator");
 
-    std::cout << "ENTERD THE POPULATION GENERATRO CONSTRUCTOR" << std::endl;
+    log.debug("ENTERD THE POPULATION GENERATOR CONSTRUCTOR");
     min_domain = min_domain_;
     max_domain = max_domain_;
     steps = steps_;
     // setvalues = setValues;   //copying the setValues over
     //setValues.resize(setvalues_.size());
-    std::cerr << "copying set values" << std::endl;
     for (unsigned int i = 0; i < setvalues_.size(); i++ )
     {
         setValues.push_back(setvalues_[i]);
@@ -23,24 +23,20 @@ populationGenerator::populationGenerator(vector <double> min_domain_ , vector<do
 
     dimensions = min_domain.size() + setValues.size();
 
-    std::cerr << "done copying set values" << std::endl;
+    log.debug("done copying set values");
 
     // Create the population based on the above info
     int num_samples = 1;
 
-    std::cerr << "calculating no of samples" << std::endl;
     //std::cout<<"size of domain"<<min_domain.size()<<"cout the size of steps"<<steps.size();
     for ( unsigned int i = 0; i < min_domain.size(); i++ )
         num_samples = num_samples * steps[i];
 
     for ( unsigned int i = 0; i < setValues.size(); i++ )
         num_samples = num_samples * setValues.at(i).size();
-
-
-    std::cerr << "done calculating" << std::endl;
+    log.debug("calculated no of samples: ", num_samples);
 
     total_population_size = num_samples;
-    std::cerr << "leaving function " << std::endl;
     ///total numbe of possible samples
     //std::cout<<"trying to get the whole pop"<<std::endl;
     //   entire_pop = generate_entire_pop();
@@ -59,13 +55,12 @@ populationGenerator::populationGenerator(vector <double> min_domain_ , vector<do
 population populationGenerator::generate_all_pop()
 {
 
-    std::cerr << "in the funciton generate_all_pop" << std::endl;
+    log.debug("In the funciton generate_all_pop");
     if (entire_pop.size() == 0)
         entire_pop = generate_entire_pop();
 
 
     return entire_pop;
-    std::cerr << "done with teh funciton " << std::endl;
 }
 
 population populationGenerator::generate_fromfile(std::string fileName, std::vector <namedOptParam> &rangeMap)
@@ -167,7 +162,7 @@ population populationGenerator::generate_entire_pop()
         exit(1);
 
     }
-    std::cerr << "in genereate_entire_pop" << std::endl;
+    log.debug("In genereate_entire_pop");
     //calculating the lenght of the sample
 
     ///contemplate on how the array or the population is going to be passed in or out of this as if we send reference it would create problems .
@@ -176,7 +171,6 @@ population populationGenerator::generate_entire_pop()
 
     //creating a dummy sample
     population samples(total_population_size, dimensions);
-    std::cerr << "after creating samples" << std::endl;
     int samplenum = 0;
     sample s(dimensions);
     unsigned int i;
@@ -187,7 +181,7 @@ population populationGenerator::generate_entire_pop()
     for ( ; i < dimensions; i++)
         s[i] = setValues.at(i - min_domain.size()).at(0);
 
-    std::cerr << "after getting intial sample of dimensions " << dimensions << std::endl;
+    log.debug("Created intial sample of dimensions ", dimensions);
     // std::cout<<"Done with min sample"<<std::endl;
 
     bool done = false;
@@ -276,7 +270,7 @@ population populationGenerator::generate_entire_pop()
         samplenum++;
 
     }
-    std::cerr << "after the loop " << std::endl;
+    log.debug("Population generated");
     return samples;
 }
 population populationGenerator::generate_random_pop(int number)
