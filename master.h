@@ -33,6 +33,10 @@ namespace sivelab
                                           std::vector<double> &stepValues,
                                           std::vector<vector<double> > &setValues,
                                           std::vector<std::string> &singleValues);
+            static std::string searchForPROJFile(const std::string &dir);
+            static void copyFile(const std::string &sourceFilename, const std::string &destFilename);
+
+            string BASEPROJ_INNER_PATH;
         private:
             logger log;
 
@@ -45,7 +49,6 @@ namespace sivelab
             long int seednumber;
 
             string solver_name;
-            string BASEPROJ_INNER_PATH;
             std::string populationFile;
             std::string fitness_function;
             std::string avgParamName;
@@ -75,6 +78,11 @@ namespace sivelab
             bool isNumeric(std::string value);
             namedOptParam *lookupDataInMapFromSampleIndex(unsigned int idx);
             dependencyOptParam *lookupDataInDependencyMap(unsigned int idx);
+            namedOptParam *lookupDataInSolverMap(unsigned int idx);
+            namedOptParam *lookupDataInRangeMap(unsigned int idx);
+            namedOptParam *lookupDataInSingleMap(unsigned int idx);
+            namedOptParam *lookupDataInSetMap(unsigned int idx);
+
             void readOptimizationMetaFile(const std::string &filename);
     };
 }
