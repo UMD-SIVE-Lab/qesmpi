@@ -1,0 +1,4 @@
+cuda lib in libsivelab is disabled as cuda5.0 does not work with gcc4.8 and my code uses c++11 features
+fisheyegen executable is also having compile issues
+changed baseprojectpath in optfile optTest8D.opt
+utils.cpp: No idea what these are figure out them quicka nd move them to appropriate classes
