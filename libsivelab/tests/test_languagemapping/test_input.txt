@@ -1,0 +1,6 @@
+second.buildings[0].bldNum = 10
+second.buildings[1].bldNum = 200
+second.buildings[0].xfo = 99.3
+first.buildings[0].gamma = 8787
+first.buildings[1].gamma = 11
+second.x_subdomain_sw = 123

@@ -4,6 +4,9 @@ project (optimizationCode)
 #Setting compiler to use C++11
 SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
 
+#set libsivelab path
+SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/libsivelab" CACHE STRING "Path to the directory where the libsivelab repository is located (assumes code is built into a directory named 'build').")
+
 #MPI 
 FIND_PACKAGE(MPI REQUIRED)
 
@@ -14,6 +17,10 @@ FIND_PACKAGE(Boost COMPONENTS mpi serialization REQUIRED)
 #include_directories
 include_directories (${Boost_INCLUDE_DIRS})
 include_directories (${MPI_CXX_INCLUDE_PATH})
+include_directories (${LIBSIVELAB_PATH}) 
+
+#link include_directories
+LINK_DIRECTORIES (${LIBSIVELAB_PATH}/lib)
 
 #build executable 
 add_executable(quic quic.cpp
@@ -22,8 +29,12 @@ add_executable(quic quic.cpp
 					FitnessCache.cpp
 					population_gen.cpp
 					samples.cpp
+					directory.cpp
+					FitnessCache.cpp
 				)
 
 #libraries 
 target_link_libraries( quic ${MPI_LIBRARIES})
 target_link_libraries( quic ${Boost_LIBRARIES})
+target_link_libraries (quic sive-util) 
+target_link_libraries (quic sive-quicutil)
