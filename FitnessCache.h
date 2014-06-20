@@ -2,7 +2,7 @@
 #define __FITNESS_CACHE_H__ 1
 
 #include <vector>
-#include "samples.h"
+#include "population.h"
 
 class FitnessCache
 {
