@@ -23,18 +23,27 @@ include_directories (${LIBSIVELAB_PATH})
 LINK_DIRECTORIES (${LIBSIVELAB_PATH}/lib)
 
 #build executable 
+# add_executable(quic quic.cpp
+# 					ArgumentParsing.cpp
+# 					master.cpp
+# 					FitnessCache.cpp
+# 					population_gen.cpp
+# 					samples.cpp
+# 					directory.cpp
+# 				)
+
 add_executable(quic quic.cpp
 					ArgumentParsing.cpp
-					master.cpp
-					FitnessCache.cpp
+					gpu_plume_job.cpp
 					population_gen.cpp
-					samples.cpp
+					population.cpp
 					directory.cpp
 					FitnessCache.cpp
-				)
+					concentrationRedux.cpp
+			)
 
 #libraries 
 target_link_libraries( quic ${MPI_LIBRARIES})
 target_link_libraries( quic ${Boost_LIBRARIES})
-target_link_libraries (quic sive-util) 
 target_link_libraries (quic sive-quicutil)
+target_link_libraries (quic sive-util) 
