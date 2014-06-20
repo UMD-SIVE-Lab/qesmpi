@@ -1,14 +1,327 @@
 //stdlib headers
 #include "iostream"
+#include "sstream"
+
 //framerworks headers
-#include "boost/mpi/environment.hpp"
-#include "boost/mpi/communicator.hpp"
-#include <boost/serialization/vector.hpp>
+#include "boost/mpi.hpp"
+#include "boost/variant.hpp"
+#include "boost/serialization/variant.hpp"
+#include "logger/logger.h"
 
 //application headers
 #include "ArgumentParsing.h"
-#include "master.h"
+#include "gpu_plume_job.h"
+
+//using namespaces
+using namespace std;
+
+
+//frameworks namespaces
+namespace mpi = boost::mpi;
+
+//application namespaces
+using namespace sivelab;
+
+constexpr int MASTER = 0;
+
+enum  MESSAGE_TYPE
+{
+    JOB_DATATYPE, JOB_OBJECT, POPULATION, EXIT
+};
+
+//modify this as new jobs are added
+enum JOB_TYPE
+{
+    GPU_PLUME, INVALID_JOB
+};
+
+//modify this as new jobs are added
+typedef boost::variant<gpu_plume_job> ANY_JOB;
+
+int main(int argc, char  *argv[])
+{
+
+    /*{
+        int i = 0;
+        char hostname[256];
+        gethostname(hostname, sizeof(hostname));
+        printf("PID %d on %s ready for attach\n", getpid(), hostname);
+        fflush(stdout);
+        while (0 == i)
+            sleep(5);
+    }*/
+    //creating a logger
+    logger log( DEBUG, "quic");
+
+    //initializing mpi environment
+    mpi::environment env;
+    mpi::communicator world;
+
+    int total_servants = world.size() - 1; //excluding master
+    //total_servants = 1;//REOMVE THIS
+    if (total_servants < 1)
+    {
+        log.error("Need atleast 2 nodes");
+        exit(EXIT_FAILURE);
+    }
+
+    const string mastername = "Rias Gremory";
+
+    ArgumentParsing argParser;
+    argParser.reg("version", 'v', no_argument);
+    argParser.reg("solver", 's', required_argument);
+    argParser.reg("numsamples", 'n', required_argument);
+    argParser.reg("sigma", 'q', required_argument);
+    argParser.reg("convergence", 'c', required_argument);
+    argParser.reg("optfile", 'o', required_argument);//fix this it is not erring out when an optimization file is not given
+    argParser.reg("usedb", 'd', no_argument);
+    argParser.reg("loglevel", 'l', required_argument);
+
+    argParser.processCommandLineArgs(argc, argv);
+
+    //setting log level
+    string printinfo = "info";
+    if (argParser.isSet("loglevel", printinfo))
+    {
+        if (printinfo == "debug")
+            log.set_log_level(DEBUG);
+        else if (printinfo == "info")
+            log.set_log_level(INFO);
+        else if (printinfo == "error")
+            log.set_log_level(ERROR);
+        else if (printinfo == "all")
+            log.set_log_level(ALL);
+
+        log.debug("Log level set to:", printinfo);
+    }
+
+    std::string output_location;
+    {
+        stringstream ss;
+        ss << "/scratch/workingDir_";
+        ss << world.rank();
+        output_location = ss.str();
+        ss.clear();
+    }
+
+    if (world.rank() == MASTER)
+    {
+        log.info("Master(", "\b" + mastername, "\b) node started");
+        log.info("Total no of servants: " , world.size());
+
+
+        if (argParser.isSet("version"))
+        {
+            std::cout << "plumeOptimization: version 0.0.1" << std::endl;
+        }
+        std::string argVal = "";
+        bool use_BruteForceSolver = false;
+        if (argParser.isSet("solver", argVal))
+        {
+            if (argVal == "bruteforce" || argVal == "BruteForce" || argVal == "brute")
+                use_BruteForceSolver = true;
+        }
+        int SIR_numSamples = 5;
+        if (argParser.isSet("numsamples", argVal))
+        {
+            SIR_numSamples = atoi(argVal.c_str());
+        }
+        float SIR_initialSigma = 2.25;
+        if (argParser.isSet("sigma", argVal))
+        {
+            SIR_initialSigma = atof(argVal.c_str());
+        }
+        float SIR_convergence = 2.0;
+        if (argParser.isSet("convergence", argVal))
+        {
+            SIR_convergence = atof(argVal.c_str());
+        }
+
+        bool useDB = false;
+        std::string optimizationFile = "";
+        if (argParser.isSet("usedb"))
+        {
+            std::cout << "setting useDB to true" << std::endl;
+            useDB = true;
+
+
+
+        }
+        else if (argParser.isSet("optfile", argVal))
+        {
+            optimizationFile = argVal;
+        }
+
+        if (optimizationFile == "")
+        {
+            log.error("Need an optimization file!  Please use the --optfile=<FILENAME> option to specify the opt file.");
+            exit(1);
+        }
+
+
+        //peek into optfile or take a commandline argument and change this appropriately
+        JOB_TYPE job_type = GPU_PLUME;
+
+        job *temp = NULL;
+        ANY_JOB v;
+        v = gpu_plume_job(optimizationFile);
+
+        if (job_type == GPU_PLUME)
+        {
+
+            temp = &boost::get<gpu_plume_job>(v);
+        }
+        class job &job = *temp;
+        population pop = job.get_population();
+
+        //distribute work to clients assuming they are homogeneous
+        int population_size = pop.size();
+        int required_servants = total_servants;
+        if (total_servants > population_size)
+        {
+            log.debug("Excess servants, required only " , population_size , "servants");
+
+            required_servants = population_size;
+        }
+
+        int each_servant_work_size = population_size / total_servants;
+
+        log.debug("Population size: " , pop.size());
+        log.debug("Number of servants working: " , required_servants );
+        log.debug("Each servant work size " , each_servant_work_size );
+
+        int servant = 1;
+
+        //send job type to all servants
+        for (; servant <= total_servants; servant++)
+        {
+            world.send(servant, JOB_DATATYPE, job_type);
+        }
+        log.debug("Finished sending job types");
+
+        //send job object to all servants
+        for (servant = 1; servant <= total_servants; servant++)
+        {
+            world.send(servant, JOB_OBJECT, v);
+        }
+        log.debug("Finished sending job objects");
+        //send work for each servant
+        population subset;
+        int next = 0;
+        servant = 1;
+        while ((next = pop.get_subset(next, each_servant_work_size, subset)) != -1)
+        {
+            world.send(servant, POPULATION, subset);
+            log.debug(mastername, "sent work to servant:", servant);
+            subset.clear();
+            world.isend(servant, EXIT);
+            servant++;
+        }
+
+
+        //pop.print();
+        log.info(mastername, "distributed work to all servants, waiting for results");
+        world.probe(1, mpi::any_tag);
+    }
+    else
+    {
+        log.info(mastername, "\b's servant", world.rank(), "ready to fight");
+        string base_proj_innerpath = "";
+        JOB_TYPE job_type = INVALID_JOB;
+        job *temp = NULL;
+        ANY_JOB v;
+        while (true)
+        {
+            population pop;
+            class mpi::status status = world.probe(MASTER, mpi::any_tag);
+            if (status.tag() == MESSAGE_TYPE::EXIT)
+            {
+                log.info("Servant", world.rank(), "well served giving it rest", "Exiting");
+                break;
+            }
+            else if (status.tag() == JOB_DATATYPE)
+            {
+                world.recv(status.source(), JOB_DATATYPE, job_type);
+                log.debug("Received job type", job_type);
+            }
+            else if (status.tag() == JOB_OBJECT)
+            {
+
+                world.recv(status.source(), JOB_OBJECT, v);
+                if (job_type == GPU_PLUME)
+                {
+                    temp = &boost::get < gpu_plume_job>(v);
+                    log.debug("Received job object");
+                    //temp->printOptimizationParams();
+                }
+                if (temp == NULL)
+                    log.debug("temp is NULL");
+                //temp->printOptimizationParams();
+            }
+            else
+            {
+                char pwd[FILENAME_MAX];
+                getcwd(pwd, sizeof(pwd));
+                log.debug("Servant", world.rank(), "Current working directory", pwd);
+
+                //otherwise we receive need to perform the calculations
+                world.recv(status.source(), POPULATION, pop);
+                log.debug(mastername, "\b's servant" , world.rank(), "received work of size:" , pop.size() );
+                //pop.print();
+
+                class job &job = *temp;
+
+                std::string output_location;
+                {
+                    stringstream ss;
+                    ss << "/tmp/workingDir_";
+                    ss << world.rank();
+                    output_location = ss.str();
+                    ss.clear();
+                }
+
+                if (!job.setup_environment(output_location))
+                {
+                    log.error("Servant", world.rank(), "Error setting up environment");
+                    exit(EXIT_FAILURE);
+                }
+                else
+                {
+                    log.debug("Servant", world.rank(), "Environment setup successful");
+                }
+
+                if (!job.eval_population_fitness(pop))
+                {
+                    log.error("Servant", world.rank(), "Error evaluating sample fitness");
+                    //exit(EXIT_FAILURE);
+                }
+                else
+                {
+                    log.debug("Servant", world.rank(), "Population fitness evaluation DONE");
+                    for (auto &sample : pop)
+                    {
+                        log.debug("Servant", world.rank(), sample);
+                    }
+                }
+
+            }
+        }
+    }
+    return 0;
+}
+
+#ifdef BACKUP_CODE
+//stdlib headers
+#include "iostream"
+
+//framerworks headers
+#include "boost/mpi/environment.hpp"
+#include "boost/mpi/communicator.hpp"
+
+//application headers
+#include "ArgumentParsing.h"
 #include "logger/logger.h"
+#include "directory.h"
 
 //using namespaces
 using namespace std;
@@ -24,13 +337,22 @@ constexpr int MASTER = 0;
 
 enum MESSAGE_TYPE
 {
-    WORK, EXIT
+    BASEPROJ_INNER_PATH, POPULATION, EXIT
 };
+
 
 int main(int argc, char  *argv[])
 {
 
-
+    {
+        int i = 0;
+        char hostname[256];
+        gethostname(hostname, sizeof(hostname));
+        printf("PID %d on %s ready for attach\n", getpid(), hostname);
+        fflush(stdout);
+        while (0 == i)
+            sleep(5);
+    }
     //creating a logger
     logger log( INFO, "quic");
 
@@ -48,21 +370,47 @@ int main(int argc, char  *argv[])
 
     const string mastername = "Rias Gremory";
 
+    ArgumentParsing argParser;
+    argParser.reg("version", 'v', no_argument);
+    argParser.reg("solver", 's', required_argument);
+    argParser.reg("numsamples", 'n', required_argument);
+    argParser.reg("sigma", 'q', required_argument);
+    argParser.reg("convergence", 'c', required_argument);
+    argParser.reg("optfile", 'o', required_argument);//fix this it is not erring out when an optimization file is not given
+    argParser.reg("usedb", 'd', no_argument);
+    argParser.reg("loglevel", 'l', required_argument);
+
+    argParser.processCommandLineArgs(argc, argv);
+
+    //setting log level
+    string printinfo = "info";
+    if (argParser.isSet("loglevel", printinfo))
+    {
+        if (printinfo == "debug")
+            log.set_log_level(DEBUG);
+        else if (printinfo == "info")
+            log.set_log_level(INFO);
+        else if (printinfo == "error")
+            log.set_log_level(ERROR);
+        else if (printinfo == "all")
+            log.set_log_level(ALL);
+
+        log.debug("log level set to:", printinfo);
+    }
+
+    std::string output_location;
+    {
+        stringstream ss;
+        ss << "/scratch/workingDir_";
+        ss << world.rank();
+        output_location = ss.str();
+        ss.clear();
+    }
     if (world.rank() == MASTER)
     {
         log.info("Master(", "\b" + mastername, "\b) node started");
-        log.info("Total no of servants: " , world.size());
+        log.info("Total no of servants: " , total_servants);
 
-        ArgumentParsing argParser;
-        argParser.reg("version", 'v', no_argument);
-        argParser.reg("solver", 's', required_argument);
-        argParser.reg("numsamples", 'n', required_argument);
-        argParser.reg("sigma", 'q', required_argument);
-        argParser.reg("convergence", 'c', required_argument);
-        argParser.reg("optfile", 'o', required_argument);//fix this it is not erring out when an optimization file is not given
-        argParser.reg("usedb", 'd', no_argument);
-
-        argParser.processCommandLineArgs(argc, argv);
 
         if (argParser.isSet("version"))
         {
@@ -130,14 +478,20 @@ int main(int argc, char  *argv[])
         log.debug("Population size: " , pop.size());
         log.debug("Number of servants working: " , required_servants );
         log.debug("Each servant work size " , each_servant_work_size );
+        int servant = 1;
+        for (; servant <= total_servants; servant++)
+        {
+            world.isend(servant, BASEPROJ_INNER_PATH, master.BASEPROJ_INNER_PATH);
+            log.debug("Sending base proj inner  path to servant ", servant);
+        }
 
         //send work for each servant
         population subset;
         int next = 0;
-        int servant = 1;
+        servant = 1;
         while ((next = pop.get_subset(next, each_servant_work_size, subset)) != -1)
         {
-            world.isend(servant, WORK, subset);
+            world.isend(servant, POPULATION, subset);
             log.debug(mastername, "sent work to servant:", servant);
             subset.clear();
             world.isend(servant, EXIT);
@@ -151,24 +505,108 @@ int main(int argc, char  *argv[])
     else
     {
         log.info(mastername, "\b's servant", world.rank(), "ready to fight");
+        string base_proj_innerpath = "";
         while (true)
         {
             population pop;
+
             class mpi::status status = world.probe(MASTER, mpi::any_tag);
             if (status.tag() == EXIT)
             {
-                log.info("servant", world.rank()," well served giving it rest", "Exiting");
+                log.info("Servant", world.rank(), " well served giving it rest", "Exiting");
                 break;
+            }
+            else if (status.tag() == BASEPROJ_INNER_PATH)
+            {
+                world.recv(status.source(), BASEPROJ_INNER_PATH, base_proj_innerpath);
+                log.debug("Setting base proj inner path to", base_proj_innerpath);
             }
             else
             {
-                //otherwise we receive need to perform the calculations
-                world.recv(status.source(), WORK, pop);
-                log.debug(mastername, "\b's servant" , world.rank(), "received work of size: " , pop.size() );
+                /*char pwd[FILENAME_MAX];
+                getcwd(pwd, sizeof(pwd));
+                log.debug("Current working directory", pwd);
+                */
 
+                //otherwise we receive population subset need to perform the calculations
+                world.recv(status.source(), POPULATION, pop);
+                log.debug(mastername, "\b's servant" , world.rank(), "received work of size: " , pop.size() );
                 //pop.print();
+
+                //fetch the project first it may not be available on the machine running a servent
+                //make the following code cross platform
+                //system("scp ")
+                log.debug("Base proj inner path", base_proj_innerpath);
+                //make the following code cross platform
+                if (base_proj_innerpath.compare("") != 0)
+                {
+                    sivelab::QUICProject quqpData;         ///this is the Project file that holds all the quic Data
+                    std::string quicFilesPath = base_proj_innerpath + "/";
+                    quqpData.initialize_quicProjecPath(quicFilesPath);
+                    quqpData.build_map();
+
+
+                    //creating a copy of default/origional quic project files
+                    //mpi might create different processes on same machine so to avoid conflict make dirs with its rank
+                    log.debug("creating local copy of project");
+                    log.debug("creating output location", output_location.c_str());
+                    mkdir(output_location.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+                    log.debug("creating local base copy", (output_location + "/localBaseCopy").c_str());
+                    mkdir((output_location + "/localBaseCopy").c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+                    std::string projFileName = master::searchForPROJFile(base_proj_innerpath + "/..");
+                    log.debug("copying proj file: from ", quicFilesPath + "../" + projFileName, "to", output_location + "/localBaseCopy/local.proj");
+                    master::copyFile(quicFilesPath + "../" + projFileName, output_location + "/localBaseCopy/local.proj");
+
+                    log.debug("creating local inner dir", (output_location + "/localBaseCopy/local_inner").c_str());
+                    mkdir((output_location + "/localBaseCopy/local_inner").c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+                    ///copy all files to the local thingy .
+                    //bruteforce but later on replace quicProject
+                    std::string local_inner = output_location + "/localBaseCopy/local_inner";
+                    log.debug("Local inner path", local_inner);
+                    quqpData.quBuildingData.writeQUICFile(local_inner + "/QU_buildings.inp");
+                    master::copyFile(quicFilesPath + "QU_fileoptions.inp", local_inner + "/QU_fileoptions.inp");
+                    master::copyFile(quicFilesPath + "QU_landuse.inp", local_inner + "/QU_landuse.inp");
+                    quqpData.quMetParamData.writeQUICFile(local_inner + "/QU_metparams.inp");
+                    quqpData.quSimParamData.writeQUICFile(local_inner + "/QU_simparams.inp");
+                    quqpData.quMetParamData.quSensorData.writeQUICFile(local_inner + "/sensor1.inp");
+                    master::copyFile(quicFilesPath + projFileName.substr(0, projFileName.length() - 5) + ".info", local_inner + "/local.info");
+                    master::copyFile(quicFilesPath + "QP_materials.inp", local_inner + "/QP_materials.inp");
+                    master::copyFile(quicFilesPath + "QP_indoor.inp", local_inner + "/QP_indoor.inp");
+                    quqpData.qpSourceData.writeQUICFile(local_inner + "/QP_source.inp");
+                    master::copyFile(quicFilesPath + "QP_fileoptions.inp", local_inner + "/QP_fileoptions.inp");
+                    quqpData.qpParamData.writeQUICFile(local_inner + "/QP_params.inp");
+                    quqpData.qpBuildoutData.writeQUICFile(local_inner + "/QP_buildout.inp");
+
+                    ////////////////////////////////TODO TODO important ask if needed
+                    master::copyFile(quicFilesPath + "QP_particlesize.inp", local_inner + "/QP_particlesize.inp");
+                    // Landuse file
+
+                    ///at this point copy all files
+
+                    //  std::cerr<<"The values should have changed by now "<<std::endl;
+
+                    base_proj_innerpath = local_inner;
+                    log.debug("searching new local proj file", base_proj_innerpath + "/..");
+                    projFileName = master::searchForPROJFile(base_proj_innerpath + "/.."); ///as the filename will change the path
+                    std::cerr << "the new BASE project is :" << base_proj_innerpath << std::endl;
+
+
+                    //workDir.intialRun("/tmp/workingDir",quicFilesPath,quqpData,projFileName);
+
+                    //for each sample in the population create a copy of quic project files to work on and change the appropriate values accroding to the sample
+                    //creating a copy of quic project files with optimized values
+                    workDir.intialRun(output_location + "/optimizingDir", output_location + "/localBaseCopy/local_inner/", quqpData, "local.proj");
+
+
+                }
+                else
+                {
+                    log.error("Need base proj inner path");
+                }
             }
         }
     }
     return 0;
 }
+
+#endif
