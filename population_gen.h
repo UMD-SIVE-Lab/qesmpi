@@ -3,7 +3,7 @@
 
 #include<iostream>
 #include "namedOptParam.h"
-#include "samples.h"
+#include "population.h"
 #include <map>
 #include <fstream>
 #include <vector>
