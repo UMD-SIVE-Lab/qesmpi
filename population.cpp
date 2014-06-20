@@ -1,13 +1,11 @@
 #include <math.h>
 #include <list>
 #include <cstdlib>
-#include "samples.h"
-
-
 #include <vector>
 #include <iostream>
 #include <ostream>
 
+#include "population.h"
 using namespace std;
 
 // Helper function to generate a sample from a 1D gaussian distribution with
@@ -186,13 +184,13 @@ sample::eval_sample( double (*eval_func)( sample &s ) )
 
 ostream &operator<<( ostream &os, sample &s )
 {
-    os<<"{";
+    os << "{";
     os << " coord: ";
     for (unsigned int i = 0; i < s.size() - 1; i++ )
         os << s[i] << ", ";
     if ( s.size() > 0 )
         os << s[s.size() - 1] << " fitness: " << s.fitness;
-    os<<" }";
+    os << " }";
 }
 
 population &
