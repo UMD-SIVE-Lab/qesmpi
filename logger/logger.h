@@ -18,18 +18,18 @@ namespace sivelab
             LOG_LEVEL log_level;
 
             template <class T, class... Tail>
-            void print(T head,  Tail... tail)
+            void print(T head,  Tail... tail) const
             {
                 cout << head << " ";
                 print(std::forward<Tail>(tail)...);
             }
 
-            void print()
+            void print() const
             {
                 cout << endl;
             }
         public:
-            logger(){}
+            logger():log_level(INFO), class_name("Anonymous"){}
             logger(LOG_LEVEL log_level_, string class_name_): log_level(log_level_), class_name(class_name_)
             {
 
@@ -37,7 +37,7 @@ namespace sivelab
             ~logger() {}
 
             template <class... Args>
-            void error(Args... args)
+            void error(Args... args) const
             {
                 if (log_level <= LOG_LEVEL::ERROR)
                 {
@@ -46,7 +46,7 @@ namespace sivelab
             }
 
             template <class... Args>
-            void info(Args... args)
+            void info(Args... args) const
             {
                 if (log_level <= LOG_LEVEL::INFO)
                 {
@@ -55,7 +55,7 @@ namespace sivelab
             }
 
             template <class... Args>
-            void debug(Args... args)
+            void debug(Args... args) const
             {
                 if (log_level <= LOG_LEVEL::DEBUG)
                 {
