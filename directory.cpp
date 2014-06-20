@@ -7,7 +7,7 @@ void directory::intialRun(std::string out, std::string quicPath, sivelab::QUICPr
 
 
 
-    cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4" << out << std::endl;
+    //cout , "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4" , out );
     char dirName2[128];
 
     outputDir = out; //this directories path
@@ -22,81 +22,81 @@ void directory::intialRun(std::string out, std::string quicPath, sivelab::QUICPr
     quqpData.m_quicProjectPath = quicPath;
     projFileName = projFileName1;
 
-    ////////////things i want in intialrun : /
+    ////////////things i want in intialrun : /directory()
     ///-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //////optimizationRun.proj
 
-    std::cout << std::endl << "should copy  optimizationRun.proj copied=" << dir[0]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + "../" + projFileName, outputDir + "/../" + dir[0]->fileName);
-    dir[0]->isValid = true;
+    log.debug( "should copy  optimizationRun.proj copied=" , dir[0].fileName );
+    copyFile(quqpData.m_quicProjectPath + "../" + projFileName, outputDir + "/../" + dir[0].fileName);
+    dir[0].isValid = true;
 
 
 
-    std::cout << std::endl << "should copy  QU_buildings.inp copied=" << dir[1]->fileName << std::endl;
+    log.debug( "should copy  QU_buildings.inp copied=" , dir[1].fileName );
 
-    dir[1]->isValid = false;
-    quqpData.quBuildingData.writeQUICFile(outputDir + "/" + dir[1]->fileName);
+    dir[1].isValid = false;
+    quqpData.quBuildingData.writeQUICFile(outputDir + "/" + dir[1].fileName);
 
-    std::cout << std::endl << "should copy QU_fileoptions.inp copied=" << dir[2]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + dir[2]->fileName, outputDir + "/" + dir[2]->fileName);
-    dir[2]->isValid = true;
+    log.debug( "should copy QU_fileoptions.inp copied=" , dir[2].fileName );
+    copyFile(quqpData.m_quicProjectPath + dir[2].fileName, outputDir + "/" + dir[2].fileName);
+    dir[2].isValid = true;
 
 
     // Landuse file
-    std::cout << std::endl << "should copy QU_landuse.inp copied=" << dir[3]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + dir[3]->fileName, outputDir + "/" + dir[3]->fileName);
-    dir[3]->isValid = true;
+    log.debug( "should copy QU_landuse.inp copied=" , dir[3].fileName );
+    copyFile(quqpData.m_quicProjectPath + dir[3].fileName, outputDir + "/" + dir[3].fileName);
+    dir[3].isValid = true;
 
 
-    std::cout << std::endl << "should copy QU_metparams.inp copied=" << dir[4]->fileName << std::endl;
-
-
-
-    quqpData.quMetParamData.writeQUICFile(outputDir + "/" + dir[4]->fileName);
-    dir[4]->isValid = false;
-
-    std::cout << std::endl << "should copy QU_simparams.inp copied=" << dir[5]->fileName << std::endl;
-
-    quqpData.quSimParamData.writeQUICFile(outputDir + "/" + dir[5]->fileName);
-    dir[5]->isValid = false;
+    log.debug( "should copy QU_metparams.inp copied=" , dir[4].fileName );
 
 
 
-    std::cout << std::endl << "should copy sensor1.inp copied=" << dir[6]->fileName << std::endl;
+    quqpData.quMetParamData.writeQUICFile(outputDir + "/" + dir[4].fileName);
+    dir[4].isValid = false;
 
-    quqpData.quMetParamData.quSensorData.writeQUICFile(outputDir + "/" + dir[6]->fileName);
-    dir[6]->isValid = false;
+    log.debug( "should copy QU_simparams.inp copied=" , dir[5].fileName );
 
-
-
-
-
-    std::cout << std::endl << "should copy optimizationRun.info copied=" << dir[7]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + projFileName.substr(0, projFileName.length() - 5) + ".info", outputDir + "/" + dir[7]->fileName);
-    dir[7]->isValid = true;
-
-    std::cout << std::endl << "should copy QP_materials.inp copied=" << dir[8]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + dir[8]->fileName, outputDir + "/" + dir[8]->fileName);
-    dir[8]->isValid = true;
+    quqpData.quSimParamData.writeQUICFile(outputDir + "/" + dir[5].fileName);
+    dir[5].isValid = false;
 
 
-    std::cout << std::endl << "should copy QP_indoor.inp copied=" << dir[9]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + dir[9]->fileName, outputDir + "/" + dir[9]->fileName);
-    dir[9]->isValid = true;
 
+    log.debug( "should copy sensor1.inp copied=" , dir[6].fileName );
 
-    std::cout << std::endl << "should copy QP_source.inp copied=" << dir[10]->fileName << std::endl;
-    //  quqpData.qpSourceData.readQUICFile(quqpData.m_quicProjectPath + dir[10]->fileName);
-    dir[10]->isValid = false;
-    quqpData.qpSourceData.writeQUICFile(outputDir + "/" + dir[10]->fileName);
+    quqpData.quMetParamData.quSensorData.writeQUICFile(outputDir + "/" + dir[6].fileName);
+    dir[6].isValid = false;
 
 
 
 
 
-    std::cout << std::endl << "should copy QP_fileoptions.inp copied=" << dir[11]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + dir[11]->fileName, outputDir + "/" + dir[11]->fileName);
-    dir[11]->isValid = true;
+    log.debug( "should copy optimizationRun.info copied=" , dir[7].fileName );
+    copyFile(quqpData.m_quicProjectPath + projFileName.substr(0, projFileName.length() - 5) + ".info", outputDir + "/" + dir[7].fileName);
+    dir[7].isValid = true;
+
+    log.debug( "should copy QP_materials.inp copied=" , dir[8].fileName );
+    copyFile(quqpData.m_quicProjectPath + dir[8].fileName, outputDir + "/" + dir[8].fileName);
+    dir[8].isValid = true;
+
+
+    log.debug( "should copy QP_indoor.inp copied=" , dir[9].fileName );
+    copyFile(quqpData.m_quicProjectPath + dir[9].fileName, outputDir + "/" + dir[9].fileName);
+    dir[9].isValid = true;
+
+
+    log.debug( "should copy QP_source.inp copied=" , dir[10].fileName );
+    //  quqpData.qpSourceData.readQUICFile(quqpData.m_quicProjectPath + dir[10].fileName);
+    dir[10].isValid = false;
+    quqpData.qpSourceData.writeQUICFile(outputDir + "/" + dir[10].fileName);
+
+
+
+
+
+    log.debug( "should copy QP_fileoptions.inp copied=" , dir[11].fileName );
+    copyFile(quqpData.m_quicProjectPath + dir[11].fileName, outputDir + "/" + dir[11].fileName);
+    dir[11].isValid = true;
 
 
 
@@ -104,8 +104,8 @@ void directory::intialRun(std::string out, std::string quicPath, sivelab::QUICPr
 
 
 
-    std::cout << std::endl << "should copy QP_params.inp copied=" << dir[12]->fileName << std::endl;
-    //quqpData.qpParamData.readQUICFile(quqpData.m_quicProjectPath + dir[12]->fileName);
+    log.debug( "should copy QP_params.inp copied=" , dir[12].fileName );
+    //quqpData.qpParamData.readQUICFile(quqpData.m_quicProjectPath + dir[12].fileName);
 
     // We need to modify the QP Param data to only use 1 particle
     // and run for a minimum amount of time while generating the
@@ -119,23 +119,18 @@ void directory::intialRun(std::string out, std::string quicPath, sivelab::QUICPr
 
     */  ///TODO Is this required
 
-    quqpData.qpParamData.writeQUICFile(outputDir + "/" + dir[12]->fileName);
-    dir[12]->isValid = false;
+    quqpData.qpParamData.writeQUICFile(outputDir + "/" + dir[12].fileName);
+    dir[12].isValid = false;
 
 
-    std::cout << std::endl << "should copy QP_particlesize.inp copied=" << dir[13]->fileName << std::endl;
-    copyFile(quqpData.m_quicProjectPath + dir[13]->fileName, outputDir + "/" + dir[13]->fileName);
-    dir[13]->isValid = true;
+    log.debug( "should copy QP_particlesize.inp copied=" , dir[13].fileName );
+    copyFile(quqpData.m_quicProjectPath + dir[13].fileName, outputDir + "/" + dir[13].fileName);
+    dir[13].isValid = true;
 
 
-    std::cout << std::endl << "should copy QP_buildout.inp" << dir[14]->fileName << std::endl;
-    quqpData. qpBuildoutData.writeQUICFile(outputDir + "/" + dir[14]->fileName);
-    dir[14]->isValid = false;
-
-
-
-
-
+    log.debug( "should copy QP_buildout.inp" , dir[14].fileName );
+    quqpData. qpBuildoutData.writeQUICFile(outputDir + "/" + dir[14].fileName);
+    dir[14].isValid = false;
 
 }
 
@@ -168,7 +163,7 @@ dataStructureNames.push_back("quSensor");
         dataStructureNames.push_back("qpParams");
 
         for(int crap=0;crap<dataStructureNames.size();crap++)
-            std::cout<<"the dataStructurenames :"<<dataStructureNames.at(crap)<<std::endl;
+            log.debug("the dataStructurenames :",dataStructureNames.at(crap),std::endl;
 
 
 
@@ -194,14 +189,14 @@ dataStructureNames.push_back("quSensor");
 
         // sprintf(dirName2, "%s/optimizationRun_inner", outputDir.c_str());
           //outDirPath = outDirPath+"/optimizationRun_inner";
-        cout<<"this shoyuld have worked " <<outputDir<<"  #########################################################"<<endl;
+        cout,"this shoyuld have worked " ,outputDir,"  #########################################################",endl;
           char cmdBuffer[1024];
           sprintf(cmdBuffer, "cd %s; %s", outputDir.c_str(), quEXE.c_str());
-          std::cout << "Executing QUICURB to generate new wind field data..." << std::endl;
+          log.debug( "Executing QUICURB to generate new wind field data..." );
           system(cmdBuffer);
 
          // sprintf(cmdBuffer, "cd %s; %s", outputDir.c_str(), qpEXE.c_str());
-         // std::cout << "Executing QUICPLUME for 1 iteration to generate turbulence field data..." << std::endl;
+         // log.debug( "Executing QUICPLUME for 1 iteration to generate turbulence field data..." );
      //     system(cmdBuffer);
 
           // Now that quicplume has been run to generate the turbulence,
@@ -246,7 +241,7 @@ dataStructureNames.push_back("quSensor");
          quqpData.qpParamData.nby = 50;
           quqpData.qpParamData.nbz = quqpData.quBuildingData.buildings[ bld2Idx ].height;
 
-          std::cout << "set conc N to " << quqpData.qpParamData.nbx << " x " << quqpData.qpParamData.nby << " x " << quqpData.qpParamData.nbz << std::endl;
+          log.debug( "set conc N to " , quqpData.qpParamData.nbx , " x " , quqpData.qpParamData.nby , " x " , quqpData.qpParamData.nbz );
 
           quqpData.qpParamData.xbl = quqpData.quBuildingData.buildings[ bld2Idx ].xfo - quqpData.qpParamData.nbx;
           quqpData.qpParamData.xbu = quqpData.quBuildingData.buildings[ bld2Idx ].xfo;
@@ -257,8 +252,8 @@ dataStructureNames.push_back("quSensor");
           quqpData.qpParamData.zbl = 0;
           quqpData.qpParamData.zbu = quqpData.quBuildingData.buildings[ bld2Idx ].height;
 
-          std::cout << "set conc dim to [" << quqpData.qpParamData.xbl << ", " << quqpData.qpParamData.ybl << ", " << quqpData.qpParamData.zbl << "] X ]"
-            << quqpData.qpParamData.xbu << ", " << quqpData.qpParamData.ybu << ", " << quqpData.qpParamData.zbu << "]" << std::endl;
+          log.debug( "set conc dim to [" , quqpData.qpParamData.xbl , ", " , quqpData.qpParamData.ybl , ", " , quqpData.qpParamData.zbl , "] X ]"
+            , quqpData.qpParamData.xbu , ", " , quqpData.qpParamData.ybu , ", " , quqpData.qpParamData.zbu , "]" );
 
           quqpData.qpSourceData.sources[0].points[0].x = quqpData.quBuildingData.buildings[ bld1Idx ].xfo + quqpData.quBuildingData.buildings[ bld1Idx ].length + 0.5;
           quqpData.qpSourceData.sources[0].points[1].x = quqpData.quBuildingData.buildings[ bld2Idx ].xfo - 0.5;
@@ -296,14 +291,14 @@ void directory::createOutputDir(const sample& s,string outDirPath,sivelab::QUICP
 
         // sprintf(dirName2, "%s/optimizationRun_inner", outputDir.c_str());
           outDirPath = outDirPath+"/optimizationRun_inner";
-        cout<<"this shoyuld have worked " <<outDirPath<<"  #########################################################"<<endl;
+        cout,"this shoyuld have worked " ,outDirPath,"  #########################################################",endl;
           char cmdBuffer[1024];
           sprintf(cmdBuffer, "cd %s; %s", outDirPath.c_str(), quEXE.c_str());
-          std::cout << "Executing QUICURB to generate new wind field data..." << std::endl;
+          log.debug( "Executing QUICURB to generate new wind field data..." );
           system(cmdBuffer);
 
           sprintf(cmdBuffer, "cd %s; %s", outDirPath.c_str(), qpEXE.c_str());
-          std::cout << "Executing QUICPLUME for 1 iteration to generate turbulence field data..." << std::endl;
+          log.debug( "Executing QUICPLUME for 1 iteration to generate turbulence field data..." );
           system(cmdBuffer);
 
           // Now that quicplume has been run to generate the turbulence,
@@ -355,7 +350,7 @@ void directory::createOutputDir(const sample& s,string outDirPath,sivelab::QUICP
          quqpData.qpParamData.nby = 50;
           quqpData.qpParamData.nbz = quqpData.quBuildingData.buildings[ bld2Idx ].height;
 
-          std::cout << "set conc N to " << quqpData.qpParamData.nbx << " x " << quqpData.qpParamData.nby << " x " << quqpData.qpParamData.nbz << std::endl;
+          log.debug( "set conc N to " , quqpData.qpParamData.nbx , " x " , quqpData.qpParamData.nby , " x " , quqpData.qpParamData.nbz );
 
           quqpData.qpParamData.xbl = quqpData.quBuildingData.buildings[ bld2Idx ].xfo - quqpData.qpParamData.nbx;
           quqpData.qpParamData.xbu = quqpData.quBuildingData.buildings[ bld2Idx ].xfo;
@@ -366,8 +361,8 @@ void directory::createOutputDir(const sample& s,string outDirPath,sivelab::QUICP
           quqpData.qpParamData.zbl = 0;
           quqpData.qpParamData.zbu = quqpData.quBuildingData.buildings[ bld2Idx ].height;
 
-          std::cout << "set conc dim to [" << quqpData.qpParamData.xbl << ", " << quqpData.qpParamData.ybl << ", " << quqpData.qpParamData.zbl << "] X ]"
-            << quqpData.qpParamData.xbu << ", " << quqpData.qpParamData.ybu << ", " << quqpData.qpParamData.zbu << "]" << std::endl;
+          log.debug( "set conc dim to [" , quqpData.qpParamData.xbl , ", " , quqpData.qpParamData.ybl , ", " , quqpData.qpParamData.zbl , "] X ]"
+            , quqpData.qpParamData.xbu , ", " , quqpData.qpParamData.ybu , ", " , quqpData.qpParamData.zbu , "]" );
 
           quqpData.qpSourceData.sources[0].points[0].x = quqpData.quBuildingData.buildings[ bld1Idx ].xfo + quqpData.quBuildingData.buildings[ bld1Idx ].length + 0.5;
           quqpData.qpSourceData.sources[0].points[1].x = quqpData.quBuildingData.buildings[ bld2Idx ].xfo - 0.5;
@@ -379,67 +374,67 @@ void directory::createOutputDir(const sample& s,string outDirPath,sivelab::QUICP
 
 }
 */
-directory::directory()
+directory::directory(): log(logger(DEBUG, "directory"))
 {
 
     ///:TODO initlaize quqp object with quicPath
-    counter=0;
+    counter = 0;
 
-       //file *a =new file("dam sure ");
-          // dir.push_back(a);
+    //file *a =new file("dam sure ");
+    // dir.push_back(a);
 
-    file* temp;
+    file *temp;
 
-     temp=new file("optimizationRun.proj");  //this never changes              ///0
-     dir.push_back(temp);
-       temp=new file("QU_buildings.inp");                   ///1
-     dir.push_back(temp);
-     temp=new file("QU_fileoptions.inp");                   ///2
-     dir.push_back(temp);
-      temp=new file("QU_landuse.inp");                      ///3
-     dir.push_back(temp);
-      temp=new file("QU_metparams.inp");                    ///4
-     dir.push_back(temp);
-     temp=new file("QU_simparams.inp");                     ///5
-     dir.push_back(temp);
-     temp=new file("sensor1.inp");                      ///6
-     dir.push_back(temp);
-     temp=new file("optimizationRun.info");                 ///7
-     dir.push_back(temp);
+    temp = new file("optimizationRun.proj"); //this never changes              ///0
+    dir.push_back(*temp);
+    temp = new file("QU_buildings.inp");                 ///1
+    dir.push_back(*temp);
+    temp = new file("QU_fileoptions.inp");                 ///2
+    dir.push_back(*temp);
+    temp = new file("QU_landuse.inp");                    ///3
+    dir.push_back(*temp);
+    temp = new file("QU_metparams.inp");                  ///4
+    dir.push_back(*temp);
+    temp = new file("QU_simparams.inp");                   ///5
+    dir.push_back(*temp);
+    temp = new file("sensor1.inp");                    ///6
+    dir.push_back(*temp);
+    temp = new file("optimizationRun.info");               ///7
+    dir.push_back(*temp);
 
-    temp=new file("QP_materials.inp");                      ///8
-     dir.push_back(temp);
+    temp = new file("QP_materials.inp");                    ///8
+    dir.push_back(*temp);
 
-    temp=new file("QP_indoor.inp");                     ///9
-     dir.push_back(temp);
+    temp = new file("QP_indoor.inp");                   ///9
+    dir.push_back(*temp);
 
-    temp=new file("QP_source.inp");                     ///10
-     dir.push_back(temp);
+    temp = new file("QP_source.inp");                   ///10
+    dir.push_back(*temp);
 
-    temp=new file("QP_fileoptions.inp");                    ///11
-     dir.push_back(temp);
+    temp = new file("QP_fileoptions.inp");                  ///11
+    dir.push_back(*temp);
 
 
-    temp=new file("QP_params.inp");                     ///12
-     dir.push_back(temp);
+    temp = new file("QP_params.inp");                   ///12
+    dir.push_back(*temp);
 
-    temp=new file("QP_particlesize.inp");                   ///13
-     dir.push_back(temp);
+    temp = new file("QP_particlesize.inp");                 ///13
+    dir.push_back(*temp);
 
-        temp=new file("QP_buildout.inp");                                        /////14
-    dir.push_back(temp);
+    temp = new file("QP_buildout.inp");                                      /////14
+    dir.push_back(*temp);
 
 }
 directory::~directory()
 {
 
-  for(unsigned int i=0;i<dir.size();i++)
-    {
+    /* for(unsigned int i=0;i<dir.size();i++)
+       {
 
-      delete dir.at(i);
+         delete dir.at(i);
 
-    }
-
+       }
+    */
 
 }
 /*
@@ -465,50 +460,50 @@ directory::directory(std::string out,std::string quicPath,quqpdata & quqpData,st
 }*/
 
 void directory::copyFile(const std::string &sourceFilename, const std::string &destFilename)
+{
+    int length;
+    char *byteBuffer;
+
+    std::ifstream is;
+    is.open(sourceFilename.c_str(), ios::binary);
+
+    if (is.good())
     {
-  int length;
-  char *byteBuffer;
+        // get length of file:
+        is.seekg(0, ios::end);
+        length = is.tellg();
+        is.seekg(0, ios::beg);
 
-  std::ifstream is;
-  is.open(sourceFilename.c_str(), ios::binary);
+        // allocate memory:
+        byteBuffer = new char[length];
 
-  if (is.good())
-    {
-      // get length of file:
-      is.seekg(0, ios::end);
-      length = is.tellg();
-      is.seekg(0, ios::beg);
+        // read data as a block:
+        is.read(byteBuffer, length);
+        is.close();
 
-      // allocate memory:
-      byteBuffer = new char[length];
-
-      // read data as a block:
-      is.read(byteBuffer,length);
-      is.close();
-
-      std::ofstream os;
-      os.open(destFilename.c_str(), ios::binary);
-      os.write(byteBuffer, length);
-      os.close();
+        std::ofstream os;
+        os.open(destFilename.c_str(), ios::binary);
+        os.write(byteBuffer, length);
+        os.close();
     }
-  else
+    else
     {
-      std::cerr << "Cannot copyFile: unable to open \"" << sourceFilename << "\"." << std::endl;
+        log.error("Cannot copyFile: unable to open \"" , sourceFilename , "\"" );
     }
 
-  delete [] byteBuffer;
-  return;
+    delete [] byteBuffer;
+    return;
 }
 /*
 void directory::augmentBuildingDataFromSample( const sample &s, quBuildings &bData )
 {
-  std::cout << "augment building data" << std::endl;
+  log.debug( "augment building data" );
   for (unsigned int i=0; i<s.size(); i++)
     {
       // Look up sample indices and match with population sample data types.
       namedOptParam *optData = lookupDataInRangeMap(i);
 
-      std::cout << "checking idx=" << i << ", " << optData->description << std::endl;
+      log.debug( "checking idx=" , i , ", " , optData->description );
 
       if (optData->description == "bldxfo")
     {
@@ -549,7 +544,7 @@ void directory::augmentBuildingDataFromSample( const sample &s, quBuildings &bDa
       for (unsigned int bidx=0; bidx<bData.buildings.size(); bidx++)
         {
           bData.buildings[ bidx ].height = (int)s[i];
-          std::cout << "setting building height to " << bData.buildings[bidx].height << std::endl;
+          log.debug( "setting building height to " , bData.buildings[bidx].height );
         }
 
       // TRAINING DATA
@@ -564,7 +559,7 @@ void directory::augmentBuildingDataFromSample( const sample &s, quBuildings &bDa
       for (unsigned int bidx=0; bidx<bData.buildings.size(); bidx++)
         {
           bData.buildings[ bidx ].length = (int)s[i];
-          std::cout << "setting building length to " << bData.buildings[bidx].length << std::endl;
+          log.debug( "setting building length to " , bData.buildings[bidx].length );
         }
 
       // TRAINING DATA
@@ -578,13 +573,13 @@ void directory::augmentBuildingDataFromSample( const sample &s, quBuildings &bDa
 
   // once all other parameters are varied, including length, we can
   // set the separation...
-  std::cout << "completing separation..." << std::endl;
+  log.debug( "completing separation..." );
   for (unsigned int i=0; i<s.size(); i++)
     {
       // Look up sample indices and match with population sample data types.
       namedOptParam *optData = lookupDataInRangeMap(i);
 
-      std::cout << "checking idx=" << i << ", " << optData->description << std::endl;
+      log.debug( "checking idx=" , i , ", " , optData->description );
 
       if (optData->description == "buildsep")
     {
@@ -596,7 +591,7 @@ void directory::augmentBuildingDataFromSample( const sample &s, quBuildings &bDa
       // set the xfo of bld1 based on length of buildings and separation value from sample
       int bld1xfo = bData.buildings[ bld2Idx ].xfo - bData.buildings[ bld2Idx ].length - (int)s[i];
       bData.buildings[ bld1Idx ].xfo = bld1xfo;
-      std::cout << "setting S, making building 1 xfo = " << bld1xfo << std::endl;
+      log.debug( "setting S, making building 1 xfo = " , bld1xfo );
     }
     }
 }
@@ -704,7 +699,7 @@ void directory::validateDir(const sample& s,sivelab::QUICProject &quqpData,const
             }
             else
             {
-                std::cerr<<"big error with directory manager"<<std::endl;
+                std::cerr,"big error with directory manager",std::endl;
                    exit(1);
 
             }
@@ -752,7 +747,7 @@ void directory::validateOutputDir(std::vector<std::string> &dataS,sivelab::QUICP
         }
         else
         {
-            std::cout<<"exit because of unrecognized dataStructure Name"<<std::endl;
+            log.debug("exit because of unrecognized dataStructure Name",std::endl;
 
         }
 
