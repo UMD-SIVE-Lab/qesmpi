@@ -217,6 +217,15 @@ unit
 assignment
   :
   WS* lval=lvalue WS* '=' WS* rval=rvalue WS* (comment?)
+  {
+    /*Dont even use '//' for commenting c++ code blocks in antlr it might end up as a multiline statement like the below
+      std::cout<<"lvalue = "<<$lvalue.text<<endl<<"rvalue="<<$rvalue.text<<endl;
+      Generated code:
+                    //std::cout<<"lvalue = "<<(this->get_strstream()->toStringTT(lval.start, lval.stop))
+                <<endl<<"rvalue="<<(this->get_strstream()->toStringTT(rval.start, rval.stop))
+                <<endl;
+    */
+  }
   ;
 
 comment
@@ -263,6 +272,7 @@ rvalue returns [std::map<string, string> rval]
                 trim_if(temp, is_any_of("'"));
                 each_line["rval"] = temp;
                 each_line["rval_type"] = "string";
+                //cout<<"string";
      }
   | set 
        {
@@ -270,6 +280,7 @@ rvalue returns [std::map<string, string> rval]
                   trim_if(temp, is_any_of("[]"));
                   each_line["rval"] = temp;
                   each_line["rval_type"] = "set";
+                  //cout<<"set";
        }
   | range 
          {
@@ -281,21 +292,31 @@ rvalue returns [std::map<string, string> rval]
                      each_line["step"] = temp2[1];
                      each_line["max"]  = temp2[2];
                      each_line["rval_type"] = "range";
+                     //cout<<"range";
          }
   | atomExp 
            {
-            string temp = $atomExp.text;
+           //antlr executes this code even if there is an error in parsing a semantic rule completely
+           //so place a check if there is only partial match in parsing
+           //add this check to all parsing rules 
+           //One more time antlr _/\_
+           //may be there is a better way of doing things
+           if(!error_in_parser){
+                       string temp = $atomExp.text;
                        std::vector<string> temp2;
                        split(temp2, temp, is_any_of("+-"));
                        each_line["left_opd"] = temp2[0];
                        each_line["op"] = temp[temp2[0].size()];
                        each_line["right_opd"] = temp2[1];
                        each_line["rval_type"] = "atomExp";
+                       //cout<<"atomexp";
+                       }
            }
   | num //Number- find how to capture lexer variables
   {
         each_line["rval"] = $num.text;
                 each_line["rval_type"] = "number";
+                //cout<<"number";
        }
   ;
 /*

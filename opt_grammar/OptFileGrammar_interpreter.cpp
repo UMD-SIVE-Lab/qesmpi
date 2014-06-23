@@ -15,7 +15,7 @@ int main()
     if (RUN_AS_INTERPRETER)
     {
         input_stream = &std::cin;
-        std::cout << "Rias> ";
+        //std::cout << "Rias> ";
     }
 
     long line_number = 1;
@@ -36,18 +36,18 @@ int main()
             else
             {
 
-                std::cout << "Parsing line: " << inputLine << endl;
-                std::cout << "Extracted info:" << std::endl;
+                //std::cout << "Parsing line: " << inputLine << endl;
+                //std::cout << "Extracted info:" << std::endl;
                 for (auto &itr : parser.each_line)
                 {
-                    std::cout << itr.first << " : " << itr.second << ", " << endl;
+                    //std::cout << itr.first << " : " << itr.second << ", " << endl;
                 }
-                std::cout << std::endl;
+                //std::cout << std::endl;
             }
         }
         if (RUN_AS_INTERPRETER)
         {
-            std::cout << "Rias>";
+            //std::cout << "Rias>";
         }
         line_number++;
     }
