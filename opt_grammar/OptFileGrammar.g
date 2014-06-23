@@ -298,6 +298,7 @@ rvalue returns [std::map<string, string> rval]
            {
            //antlr executes this code even if there is an error in parsing a semantic rule completely
            //so place a check if there is only partial match in parsing
+           //like in case of input a=b' it still executes the below code block
            //add this check to all parsing rules 
            //One more time antlr _/\_
            //may be there is a better way of doing things
