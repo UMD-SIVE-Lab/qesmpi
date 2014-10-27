@@ -309,7 +309,9 @@ rvalue returns [std::map<string, string> rval]
                        each_line["left_opd"] = temp2[0];
                        each_line["op"] = temp[temp2[0].size()];
                        each_line["right_opd"] = temp2[1];
-                       each_line["rval_type"] = "atomExp";
+                       stringstream ss;
+                       ss<<"atomExp"<<int(drand48()*100);//I dont think there will be more than 100 expressions
+                       each_line["rval_type"] = ss.str();
                        //cout<<"atomexp";
                        }
            }

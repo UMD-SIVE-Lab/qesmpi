@@ -1,0 +1,608 @@
+    1  man valgrind
+    2  valgrind --leak-check=yes ./quic --optfile=../optfiles/optTet8D_antlr.opt
+    3  cd ../opt_grammar/
+    4  valgrind --leak-check=yes ./OptFileGrammar
+    5  ./OptFileGrammar 
+    6  rm ./OptFileGrammar
+    7  vi makefile 
+    8  valgrind --leak-check=yes ./OptFileGrammar
+    9  make
+   10  valgrind --leak-check=yes ./OptFileGrammar
+   11  make
+   12  valgrind --leak-check=yes ./OptFileGrammar
+   13  make
+   14  valgrind --leak-check=yes ./OptFileGrammar
+   15  make
+   16  valgrind --leak-check=yes ./OptFileGrammar
+   17  make
+   18  valgrind --leak-check=yes ./OptFileGrammar
+   19  vi OptFileGrammarParser.cpp
+   20  fg
+   21  make
+   22  valgrind --leak-check=yes ./OptFileGrammar
+   23  cd ../build/
+   24  make
+   25  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   26  make
+   27  ../opt_grammar/make
+   28  make ../opt_grammar/
+   29  ../opt_grammar/make
+   30  cd ../opt_
+   31  cd ../opt_grammar/
+   32  make
+   33  cd -
+   34  make
+   35  cd -
+   36  make
+   37  echo $?
+   38  make
+   39  cd -
+   40  make
+   41  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   42  make
+   43  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   44  make
+   45  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   46  make
+   47  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   48  make
+   49  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   50  cd ..
+   51  git status 
+   52  git commit opt_grammar/* -m "antlr executes code blocks even when there is a partial hit in parsing rules so atomExp rules's code block was executing for input a=b'"
+   53  git commit opt_grammar/*.cpp opt_grammar/*.hpp opt_grammar/OptFileGrammar.g  -m "antlr executes code blocks even when there is a partial hit in parsing rules so atomExp rules's code block was executing for input a=b'"
+   54  git status 
+   55  git commit opt_grammar/OptFileGrammar.g -m "added sample input for the bug fixed in previous log"
+   56  git status 
+   57  git diff CMakeLists.txt
+   58  git diff
+   59  git sta
+   60  git status 
+   61  rm opt_grammar/.nfs00000000065e15560000034a 
+   62  lsof opt_grammar/.nfs00000000065e15560000034a 
+   63  kill 23587
+   64  lsof opt_grammar/.nfs00000000065e15560000034a 
+   65  rm opt_grammar/.nfs00000000065e15560000034a 
+   66  kill -9 23587
+   67  rm opt_grammar/.nfs00000000065e15560000034a 
+   68  lsof opt_grammar/.nfs00000000065e15560000034a 
+   69  git status 
+   70  rm optTest8D.opt 
+   71  git status 
+   72  git diff opt_grammar/
+   73  git commit opt_grammar/makefile -m "added wall compile flag"
+   74  git status
+   75  cd build/
+   76  make
+   77  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   78  make
+   79  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   80  make
+   81  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   82  make
+   83  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   84  make
+   85  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   86  make -j
+   87  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   88  make -j
+   89  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   90  man mpirun
+   91  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map --optput-filename out  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   92  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map --output-filename=out  ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   93  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   94  cat ../optfiles/optTest8D_antlr.opt 
+   95  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+   96  cd ..
+   97  cd opt_grammar/
+   98  make
+   99  cd ../build/
+  100  make
+  101  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  102  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  103  make
+  104  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  105  cd ../opt_grammar/
+  106  make
+  107  cd ../build/
+  108  make
+  109  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  110  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  111  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  112  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  113  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  114  wget -r http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/
+  115  wget -r http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/Step{1..7}/
+  116  man wget
+  117  wget -r http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/Step{1..7}/ -o log
+  118  wget -r http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/ -o log
+  119  wget -m http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/ -o log
+  120  wget -mk http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/
+  121  wget -r -erobots=off http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/
+  122  wget -r -erobots=off http://public.kitware.com/cgi-bin/viewcvs.cgi/CMake/Tests/Tutorial/Step{1..7}/ -o log
+  123  cd Step1
+  124  ls
+  125  cmake cd ../../playground/
+  126  cd Step1/
+  127  cmake 
+  128  cmake .
+  129  cd build/
+  130  cmake ..
+  131  make
+  132  make
+  133  rm -rf *
+  134  cmake ..
+  135  make
+  136  java -jar antlr-3.5.2-complete.jar OptFileGrammar.g
+  137  cd/home/csgrads/vuggu001/workspace/quik/optimizationCode/opt_grammar
+  138  cd /home/csgrads/vuggu001/workspace/quik/optimizationCode/opt_grammar
+  139  java -jar antlr-3.5.2-complete.jar OptFileGrammar.g
+  140  ls -l
+  141  make clean
+  142  ls
+  143  cd -
+  144  make
+  145  cmake ..
+  146  make
+  147  rm -rf *
+  148  cmake ..
+  149  make
+  150  cd ..
+  151  git status 
+  152  git diff opt_grammar/
+  153  vi .gitignore 
+  154  git status 
+  155  vi .gitignore 
+  156  git status 
+  157  vi .gitignore 
+  158  git status
+  159  git ls-files -i
+  160  git ls-files -i --exclude-from=[Path_To_Your_Global].gitignore
+  161  git ls-files -i --exclude-from=.gitignore
+  162  git status
+  163  git rm opt_grammar/OptFileGrammar*.cpp
+  164  cd build/
+  165  rm -rf *
+  166  make
+  167  cmake ..
+  168  make
+  169  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  170  mpirun -np 2 --output-file out --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  171  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  172  make
+  173  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  174  make
+  175  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  176  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  177  make
+  178  mpirun -np 2 --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  179  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  180  make
+  181  mpirun -np 2 --output-filename out --tag-output --machinefile machines.txt -v --display-map   ./quic --optfile=../optfiles/optTest8D_antlr.opt --loglevel=debug
+  182  git config --list 
+  183  git config user.email vuggu001@d.umn.edu
+  184  git config user.name vish
+  185  git config user.name 
+  186  git config user
+  187  git help config
+  188  git rm help
+  189  git help rm 
+  190  cd .../
+  191  cd ../../../
+  192  ls 
+  193  mkdir git
+  194  cd git
+  195  $ git clone git://github.com/schacon/grit.git mygrit
+  196  ls
+  197  cd mygrit/
+  198  git status 
+  199  ls
+  200  cat History.txt 
+  201  ls
+  202  vi benchmarks.
+  203  vi benchmarks.rb 
+  204  git status 
+  205  git checkout benchmarks.rb
+  206  git status 
+  207  git ls-files
+  208  git ls-files benchmarks.rb 
+  209  git ls-files benchmarks.rb  --error-unmatch
+  210  echo $?
+  211  ls
+  212  vi README
+  213  git status 
+  214  git add README 
+  215  git status 
+  216  echo #hello > benchmarks.rb 
+  217  git status 
+  218  cat benchmarks.
+  219  git status 
+  220  cat benchmarks.rb 
+  221  echo "#hello">>benchmarks.rb 
+  222  cat benchmarks.rb 
+  223  git status 
+  224  git add benchmarks.rb
+  225  git sta
+  226  git status 
+  227  echo "#hello">>benchmarks.rb 
+  228  git status 
+  229  git rm 
+  230  git status 
+  231  git reset HEAD benchmarks.rb
+  232  tail benchmarks.rb
+  233  git status
+  234  git add benchmarks.rb
+  235  git status
+  236  git rm benchmarks.rb 
+  237  git rm --cached benchmarks.rb 
+  238  git status
+  239  git reset HEAD benchmarks.rb
+  240  git status
+  241  git rm benchmarks.rb 
+  242  git diff
+  243  git diff --cached 
+  244  git add benchmarks.rb benchmarks.rb 
+  245  git diff
+  246  git diff --cached 
+  247  ls
+  248  rm benchmarks.rb 
+  249  git status 
+  250  git add benchmarks.rb 
+  251  git rm benchmarks.rb 
+  252  git status 
+  253  git reset HEAD benchmarks.rb
+  254  git status 
+  255  git checkout benchmarks.txt
+  256  git checkout benchmarks.rb
+  257  git status
+  258  echo "#hello">>benchmarks.rb 
+  259  git status 
+  260  git rm benchmarks.rb 
+  261  git rm -f benchmarks.rb 
+  262  git status 
+  263  git reset HEAD
+  264  cat benchmarks.txt 
+  265  cat benchmarks.rb
+  266  git status 
+  267  git remote 
+  268  git remote  -v
+  269  git branch --list
+  270  git branch 
+  271  $ git clone git://github.com/schacon/ticgit.git
+  272  cd ..
+  273  $ git clone git://github.com/schacon/ticgit.git
+  274  `ls
+  275  ls
+  276  cd ticgit/
+  277  ls
+  278  git remote 
+  279  git remote -v 
+  280  ls
+  281  git remote add pb git://github.com/paulbone/ticgit.git
+  282  git remote -v
+  283  git remote -
+  284  git remote 
+  285  git fetch pb
+  286  git remote remove pb
+  287  git remote
+  288  git fetch pb
+  289  git branch -a
+  290  git pull pb
+  291  man git pull
+  292  git branch
+  293  git pull
+  294  git push origin master
+  295  git remote show origin 
+  296  svn update
+  297  svn cleanup
+  298  svn update
+  299  cd build/
+  300  cd tests/
+  301  cd sunroof/
+  302  make
+  303  vi ../../../CMakeLists.txt 
+  304  vi ../../../tests/CMakeLists.txt 
+  305  cd ../../../
+  306  ls
+  307  cd tests/
+  308  ls
+  309  cd matterhorn/
+  310  ls
+  311  cd ../
+  312  cd ..
+  313  vi CMake
+  314  vi CMakeLists.txt 
+  315  cd build/tests/sunroof/
+  316  make
+  317  cd ..
+  318  perl build-helper.pl 
+  319  cat /home/csgrads/vuggu001/workspace/quik/qes_spf/build/CMakeFiles/CMakeOutput.log
+  320  svn update
+  321  svn status 
+  322  ccd ..
+  323  cd ..
+  324  svn status
+  325  svn update
+  326  svn upgrade 
+  327  svn update
+  328  svn upgrade
+  329  svn update
+  330  ls
+  331  cd libsivelab/
+  332  ls
+  333  rm -rf build/
+  334  ls
+  335  cd ..
+  336  du -sh libsivelab/
+  337  cd ..
+  338  cp optimizationCode optimizationCode_bak
+  339  cp - roptimizationCode optimizationCode_bak
+  340  ls -r .
+  341  ls --recursive .
+  342  ls --recursive . | grep libsivelab
+  343  cd build/
+  344  make
+  345  svn info 
+  346  svn ls https://wind.d.umn.edu/svn/
+  347  svn ls https://wind.d.umn.edu/svn/quic_energy/branches/spf/tests/sunroof
+  348  svn ls https://wind.d.umn.edu/svn/quic_energy/
+  349  svn ls https://wind.d.umn.edu/svn/libsivelab
+  350  svn ls https://wind.d.umn.edu/svn/libsivelab/trunk libsivelab
+  351  svn co https://wind.d.umn.edu/svn/libsivelab/trunk libsivelab
+  352  cd ..
+  353  svn info
+  354  cd gpuplume/
+  355  svn status 
+  356  svn upgrade
+  357  cd
+  358  cd workspace/
+  359  cd quik/
+  360  cd gpuplume_bak/
+  361  svn info
+  362  svn co https://wind.d.umn.edu/svn/gpuplume/trunk gpuplume
+  363  ls
+  364  cd ..
+  365  cd gpuplume
+  366  cmake .
+  367  make
+  368  cd ..
+  369  cd libsivelab_bak/
+  370  svn info
+  371  svn ls https://wind.d.umn.edu/svn/libsivelab
+  372  cd ..
+  373  svn co https://wind.d.umn.edu/svn/libsivelab/trunk libsivelab
+  374  cd ..
+  375  cd quik/
+  376  cd gpuplume
+  377  make
+  378  cd ../libsivelab
+  379  mkdir build
+  380  cd build/
+  381  cmake ..
+  382  make
+  383  rm -rf *
+  384  cmake ..
+  385  make
+  386  rm -rf *
+  387  cmake ..
+  388  rm -rf *
+  389  cmake ..
+  390  make
+  391  cmake ..
+  392  make
+  393  cmake ..
+  394  make
+  395  ls /home/cs/software/sivelab/
+  396  make
+  397  cmake ,,
+  398  cmake ..
+  399  make
+  400  cd ..
+  401  cd gpuplume
+  402  make
+  403  cd quik/
+  404  ls
+  405  cd qes_spf/
+  406  perl build-helper.pl 
+  407  cd tests/sunroof/
+  408  ls
+  409  make
+  410  cd ..
+  411  cd build
+  412  cmake  ..
+  413  make
+  414  hostname 
+  415  l
+  416  cd ..
+  417  ls
+  418  cd build/
+  419  rm * -r
+  420  l
+  421  ls
+  422  ccmake ..
+  423  cmake ..
+  424  make
+  425  cd ..
+  426  ls
+  427  c d opt
+  428  cd libsivelab/
+  429  cd build/
+  430  make
+  431  cd ..
+  432  cd optimizationCode/
+  433  cd b
+  434  mkdir build
+  435  cd build/
+  436  cmake ..
+  437  make
+  438  uname
+  439  uname -a
+  440  gcc -v
+  441  git status
+  442  git diff optfiles/
+  443  git diff optfiles/*
+  444  git diff optfiles/optTest8D_antlr.opt
+  445  git diff --cached optfiles/optTest8D_antlr.opt
+  446  git diff --cached opt_grammar/OptFileGrammar.g
+  447  git diff opt_grammar/OptFileGrammar.g
+  448  ls
+  449  cd ..
+  450  cd build/
+  451  ls
+  452  make
+  453  cd samples/
+  454  ls
+  455  cd ..
+  456  cd validation/
+  457  ls
+  458  gdb ./slc_fsky/
+  459  cd slc_fsky/
+  460  ls
+  461  gdb ./testFsky 
+  462  gdb ./testFsky 
+  463  ssh akka
+  464  ssh akq
+  465  ssh aka
+  466  cat /etc/hostname 
+  467  cat /etc/hosts
+  468  ping -b 192.168.0
+  469  ping -b 192.168.0
+  470  for ip in $(seq 1 254); do ping -c 1 192.168.1.$ip>/dev/null; [ $? -eq 0 ] && echo "192.168.1.$ip UP" || : ; done
+  471  ps 
+  472  ps aux
+  473  killall ping 
+  474  ps aux
+  475  ps aux
+  476  nslookup 
+  477  matlab 
+  478  matlab 
+  479  ls */*/* | grep ast
+  480  ls */*/* | grep -i ast
+  481  ls */*/* | grep -i tools
+  482  ls */*/* | grep -i templates
+  483  ls */*/* 
+  484  find . -name template
+  485  find . -name 
+  486  find . -name *.stg
+  487  make
+  488  java -jar antlr-3.5.2-complete.jar OptFileGrammar.g
+  489  ls
+  490  mv OptFileGramamr.g OptFileGrammar.g
+  491  java -jar antlr-3.5.2-complete.jar OptFileGrammar.g
+  492  matlab 
+  493  matlab 
+  494  svn status
+  495  matlab 
+  496  cd workspace/
+  497  g++-4.8 test.cpp 
+  498  g++-4.8 -std=c++11 test.cpp 
+  499  git init
+  500  vi test.cpp
+  501  git log
+  502  ls -l
+  503  git log
+  504  cd Bilamos_src/
+  505  ls
+  506  ls -lrt
+  507  history
+  508  vi ride.cpp
+  509  gvim ride.cpp
+  510  vim ride.cpp
+  511  g++ ride.cpp 
+  512  g++ -std = c++11 ride.cpp 
+  513  g++ -std=c++11 ride.cpp 
+  514  vim ride.cpp
+  515  g++ -std=c++11 ride.cpp 
+  516  vim ride.cpp
+  517  rm .ride.cpp.swp 
+  518  vim ride.cpp
+  519  g++ -std=c++11 ride.cpp 
+  520  vim ride.cpp
+  521  ./a.out 
+  522  vim ride.in 
+  523  ./a.out 
+  524  vim ride.in 
+  525  vim ride.cpp 
+  526  ls
+  527  mkdir tc
+  528  cd tc
+  529  vi bishop.cpp
+  530  racket
+  531  ls
+  532  uname
+  533  hostname 
+  534  history 
+  535  git log
+  536  cd ../Bilamos_src/
+  537  ls
+  538  java -jar antlr-3.5.2-complete.jar OptFileGrammar.g
+  539  make
+  540  wget http://megahdwall.com/wp-content/uploads/2014/06/Mechanical-Engineering-For-Page-Filetraffic-Net-1166107.jpg
+  541  history 
+  542  java -jar antlr-3.5.2-complete.jar OptFileGrammar.g
+  543  man find
+  544  java
+  545  history
+  546  git dtatus
+  547  git status
+  548  git add .
+  549  svn update
+  550  ls
+  551  cd ..
+  552  ld
+  553  ls
+  554  cd ..
+  555  ls
+  556  svn update
+  557  svn inof
+  558  svn info
+  559  ls
+  560  cd opt
+  561  cd optimizationCode/
+  562  ls
+  563  svn info
+  564  svn update
+  565  ls
+  566  java
+  567  which java
+  568  java --version
+  569  java--version
+  570  java -version
+  571  cd apps/
+  572  wget http://scalasbt.artifactoryonline.com/scalasbt/sbt-native-packages/org/scala-sbt/sbt/0.12.4/sbt.tgz
+  573  tar -xvf sbt.tgz 
+  574  ls
+  575  cd sbt/
+  576  ls
+  577  cat jansi-license.txt 
+  578  vi ~/.bashrc 
+  579  source ~/.bashrc 
+  580  sbt -h
+  581  cd ~/Desktop/idea-IC-135.1230/
+  582  mv . intellij
+  583  cd ..
+  584  mv idea-IC-135.1230/ intelliJ
+  585  cd intelliJ/
+  586  ls
+  587  cd bin/
+  588  ./idea.sh 
+  589  echo .
+  590  echo `.`
+  591  echo `pwd`
+  592  echo 'export PATH =`pwd`:$PATH'
+  593  echo 'export PATH ='`pwd`':$PATH'
+  594  echo 'export PATH ='`pwd`':$PATH'>>~/.bashrc
+  595  source ~/.bashrc 
+  596  vi ~/.bashrc
+  597  vi ~/.bashrc!
+  598  cd ../opt_grammar/
+  599  vi ~/.bashrc
+  600  echo `vi ~/.bashrc`
+  601  source ~/.bashrc 
+  602  idea.sh 
+  603  idea.sh &
+  604  sbt
+  605  cd ~/Desktop/eclipse\ scala/workspace/
+  606  git log
+  607  history
+  608  history >> history.txt

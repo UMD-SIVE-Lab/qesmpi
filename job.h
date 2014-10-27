@@ -3,6 +3,7 @@
 #define __JOB_H__ 1
 
 #include "iostream"
+#include "map"
 
 #include "population.h"
 
@@ -24,7 +25,7 @@ namespace  sivelab
         public:
             job() {}
             virtual ~job() {}
-            virtual bool readOptimizationMetaFile(const std::string &filename) = 0;
+            virtual bool readParams(const std::map<string, map<string, string>>& optParams) = 0;
             virtual void printOptimizationParams() = 0;
             virtual population get_population() const = 0;
             virtual bool eval_population_fitness( population &pop ) = 0;

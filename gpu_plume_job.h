@@ -133,8 +133,8 @@ namespace  sivelab
         public:
             gpu_plume_job(): log(DEBUG, "gpu_plume_job") {}
             ~gpu_plume_job() {}
-            gpu_plume_job(const std::string &filename);
-            bool readOptimizationMetaFile(const std::string &filename);
+            gpu_plume_job(const std::map<string, map<string, string>>& optParams);
+            bool readParams(const std::map<string, map<string, string>>& optParams);
             void printOptimizationParams();
             population get_population() const;
             bool eval_population_fitness( population &pop );

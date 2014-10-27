@@ -3,3 +3,6 @@ build
 *.out
 *sublime*
 opt_grammar/OptFileGrammar
+opt_grammar/OptFileGrammar*.hpp
+opt_grammar/OptFileGrammar*.cpp
+

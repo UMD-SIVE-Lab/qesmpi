@@ -1,6 +1,7 @@
 //stdlib headers
 #include "iostream"
 #include "sstream"
+#include "fstream"
 
 //framerworks headers
 #include "boost/mpi.hpp"
@@ -11,13 +12,12 @@
 //application headers
 #include "ArgumentParsing.h"
 #include "gpu_plume_job.h"
+#include "OptFileGrammarLexer.hpp"
+#include "OptFileGrammarParser.hpp"
 
 //using namespaces
 using namespace std;
-
-
-//frameworks namespaces
-namespace mpi = boost::mpi;
+using namespace boost;
 
 //application namespaces
 using namespace sivelab;
@@ -37,6 +37,82 @@ enum JOB_TYPE
 
 //modify this as new jobs are added
 typedef boost::variant<gpu_plume_job> ANY_JOB;
+
+
+/*
+    Reads in optfile and returns a map of optimization parameters read
+
+*/
+//consider adding interpreter support if you feel like doing it
+//constexpr bool RUN_AS_INTERPRETER = false;
+
+void readOptimizationFile(string optfile, map < string, map<string, string>>   &optParams)
+{
+    //creating logger
+    logger log(DEBUG, "quic-parsing opt");
+    OptFileGrammarLexer::InputStreamType input((ANTLR_UINT8 *) "", ANTLR_ENC_8BIT, 0, (ANTLR_UINT8 *) "userinput");
+
+    std::string inputLine;
+    ifstream fin(optfile, std::ifstream::in);
+    istream *input_stream = &fin;
+
+    long line_number = 1;
+    while (getline(*input_stream, inputLine))
+    {
+        log.debug("\n\nInput line:", inputLine);
+        trim(inputLine);
+        if (inputLine.size() != 0)
+        {
+
+            input.reuse((ANTLR_UINT8 *) inputLine.c_str(), inputLine.length(), (ANTLR_UINT8 *) "userinput");
+            OptFileGrammarLexer lexer(&input);
+            OptFileGrammarParser::TokenStreamType token_stream(ANTLR_SIZE_HINT, lexer.get_tokSource());
+            OptFileGrammarParser parser(&token_stream);
+            parser.unit();
+            if (lexer.error_in_lexer || parser.error_in_parser)
+            {
+                //WTF is wrong with this line its throwing an exception
+                /*
+                [1,0]<stderr>:*** Error in `./quic': munmap_chunk(): invalid pointer: 0x000000000197a150 ***
+                [1,0]<stderr>:[csdev01:28255] *** Process received signal ***
+                [1,0]<stderr>:[csdev01:28255] Signal: Aborted (6)
+                [1,0]<stderr>:[csdev01:28255] Signal code:  (-6)
+                [1,0]<stderr>:[csdev01:28255] [ 0] /lib/x86_64-linux-gnu/libc.so.6(+0x36ff0) [0x7fc092e32ff0]
+                [1,0]<stderr>:[csdev01:28255] [ 1] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x39) [0x7fc092e32f79]
+                [1,0]<stderr>:[csdev01:28255] [ 2] /lib/x86_64-linux-gnu/libc.so.6(abort+0x148) [0x7fc092e36388]
+                [1,0]<stderr>:[csdev01:28255] [ 3] /lib/x86_64-linux-gnu/libc.so.6(+0x741d4) [0x7fc092e701d4]
+                [1,0]<stderr>:[csdev01:28255] [ 4] /lib/x86_64-linux-gnu/libc.so.6(+0x7ef37) [0x7fc092e7af37]
+                [1,0]<stderr>:[csdev01:28255] [ 5] /usr/lib/x86_64-linux-gnu/libstdc++.so.6(_ZNSsD1Ev+0x1f) [0x7fc0937984df]
+                [1,0]<stderr>:[csdev01:28255] [ 6] ./quic(_ZNK7sivelab6logger5printIPKcISsS3_lS3_EEEvT_DpT0_+0xb3) [0x5367e9]
+                [1,0]<stderr>:[csdev01:28255] [ 7] ./quic(_ZNK7sivelab6logger5errorIJPKclS3_EEEvDpT_+0x64) [0x533424]
+                [1,0]<stderr>:[csdev01:28255] [ 8] ./quic(_Z20readOptimizationFileSsRSt3mapISsS_ISsSsSt4lessISsESaISt4pairIKSsSsEEES1_SaIS2_IS3_S6_EEE+0x26d) [0x52920a]
+                [1,0]<stderr>:[csdev01:28255] [ 9] ./quic(main+0xd0a) [0x52a3ef]
+                [1,0]<stderr>:[csdev01:28255] [10] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf5) [0x7fc092e1dec5]
+                [1,0]<stderr>:[csdev01:28255] [11] ./quic() [0x528edf]
+                [1,0]<stderr>:[csdev01:28255] *** End of error message ***
+                */
+                /*
+                Was a bug in atomExp codeblock in antlr grammar file cause antlr was executing the code block
+                even when there is only partial matching in parsing
+                The atomExp was accessing memory out of bounds
+                */
+
+                log.error("At line ", line_number, "\n");
+            }
+            else
+            {
+
+                log.debug("Extracted info:");
+                for (auto &itr : parser.each_line)
+                {
+                    log.debug(itr.first, " : ", itr.second, ", ");
+                }
+                optParams[parser.each_line["lval"]] = parser.each_line;
+            }
+        }
+        line_number++;
+    }
+}
 
 int main(int argc, char  *argv[])
 {
@@ -58,7 +134,7 @@ int main(int argc, char  *argv[])
     mpi::communicator world;
 
     int total_servants = world.size() - 1; //excluding master
-    //total_servants = 1;//REOMVE THIS
+    // total_servants = 1;//REOMVE THIS
     if (total_servants < 1)
     {
         log.error("Need atleast 2 nodes");
@@ -160,68 +236,82 @@ int main(int argc, char  *argv[])
 
 
         //peek into optfile or take a commandline argument and change this appropriately
-        JOB_TYPE job_type = GPU_PLUME;
-
-        job *temp = NULL;
-        ANY_JOB v;
-        v = gpu_plume_job(optimizationFile);
-
-        if (job_type == GPU_PLUME)
+        map<string, map<string, string>> optParams;
+        readOptimizationFile(optimizationFile, optParams);
+        log.debug("job type: ", optParams["job_type"]["rval"]);
+        if (optParams["job_type"]["rval"] != "")
         {
+            JOB_TYPE job_type = GPU_PLUME;
 
-            temp = &boost::get<gpu_plume_job>(v);
+            job *temp = NULL;
+            ANY_JOB v;
+            v = gpu_plume_job(optParams);
+            if (job_type == GPU_PLUME)
+            {
+
+                temp = &boost::get<gpu_plume_job>(v);
+            }
+            class job &job = *temp;
+            population pop = job.get_population();
+
+            //distribute work to clients assuming they are homogeneous
+            int population_size = pop.size();
+            int required_servants = total_servants;
+            if (total_servants > population_size)
+            {
+                log.debug("Excess servants, required only " , population_size , "servants");
+
+                required_servants = population_size;
+            }
+
+            int each_servant_work_size = population_size / total_servants;
+
+            log.debug("Population size: " , pop.size());
+            log.debug("Number of servants working: " , required_servants );
+            log.debug("Each servant work size " , each_servant_work_size );
+
+            int servant = 1;
+
+            //send job type to all servants
+            for (; servant <= total_servants; servant++)
+            {
+                world.send(servant, JOB_DATATYPE, job_type);
+            }
+            log.debug("Finished sending job types");
+
+            //send job object to all servants
+            for (servant = 1; servant <= total_servants; servant++)
+            {
+                world.send(servant, JOB_OBJECT, v);
+            }
+            log.debug("Finished sending job objects");
+            //send work for each servant
+            population subset;
+            int next = 0;
+            servant = 1;
+            while ((next = pop.get_subset(next, each_servant_work_size, subset)) != -1)
+            {
+                world.send(servant, POPULATION, subset);
+                log.debug(mastername, "sent work to servant:", servant);
+                subset.clear();
+                world.isend(servant, EXIT);
+                servant++;
+            }
+
+
+            //pop.print();
+            log.info(mastername, "distributed work to all servants, waiting for results");
+            world.probe(1, mpi::any_tag);
         }
-        class job &job = *temp;
-        population pop = job.get_population();
-
-        //distribute work to clients assuming they are homogeneous
-        int population_size = pop.size();
-        int required_servants = total_servants;
-        if (total_servants > population_size)
+        else
         {
-            log.debug("Excess servants, required only " , population_size , "servants");
-
-            required_servants = population_size;
+            log.error("Specify job type in optimization file eg. const job_type = 'gpu_plume'");
+            for (int servant = 1; servant < world.size(); servant++)
+            {
+                world.send( servant, EXIT);
+            }
         }
 
-        int each_servant_work_size = population_size / total_servants;
-
-        log.debug("Population size: " , pop.size());
-        log.debug("Number of servants working: " , required_servants );
-        log.debug("Each servant work size " , each_servant_work_size );
-
-        int servant = 1;
-
-        //send job type to all servants
-        for (; servant <= total_servants; servant++)
-        {
-            world.send(servant, JOB_DATATYPE, job_type);
-        }
-        log.debug("Finished sending job types");
-
-        //send job object to all servants
-        for (servant = 1; servant <= total_servants; servant++)
-        {
-            world.send(servant, JOB_OBJECT, v);
-        }
-        log.debug("Finished sending job objects");
-        //send work for each servant
-        population subset;
-        int next = 0;
-        servant = 1;
-        while ((next = pop.get_subset(next, each_servant_work_size, subset)) != -1)
-        {
-            world.send(servant, POPULATION, subset);
-            log.debug(mastername, "sent work to servant:", servant);
-            subset.clear();
-            world.isend(servant, EXIT);
-            servant++;
-        }
-
-
-        //pop.print();
-        log.info(mastername, "distributed work to all servants, waiting for results");
-        world.probe(1, mpi::any_tag);
     }
     else
     {
@@ -229,9 +319,11 @@ int main(int argc, char  *argv[])
         string base_proj_innerpath = "";
         JOB_TYPE job_type = INVALID_JOB;
         job *temp = NULL;
+        //this creates a quic project which is empty it throws a bunch of warning messages
         ANY_JOB v;
         while (true)
         {
+
             population pop;
             class mpi::status status = world.probe(MASTER, mpi::any_tag);
             if (status.tag() == MESSAGE_TYPE::EXIT)
@@ -305,6 +397,7 @@ int main(int argc, char  *argv[])
                 }
 
             }
+
         }
     }
     return 0;
@@ -523,10 +616,10 @@ int main(int argc, char  *argv[])
             }
             else
             {
-                /*char pwd[FILENAME_MAX];
+                char pwd[FILENAME_MAX];
                 getcwd(pwd, sizeof(pwd));
                 log.debug("Current working directory", pwd);
-                */
+                
 
                 //otherwise we receive population subset need to perform the calculations
                 world.recv(status.source(), POPULATION, pop);
