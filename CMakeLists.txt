@@ -5,14 +5,17 @@ project (optimizationCode)
 SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
 SET (CMAKE_BUILD_TYPE Debug)
 
-#set libsivelab path
-SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/libsivelab" CACHE STRING "Path to the directory where the libsivelab repository is located (assumes code is built into a directory named 'build').")
+#
+#	SIVELAB
+#
+SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/../libsivelab" CACHE STRING "Path to the directory where the libsivelab repository is located (assumes code is built into a directory named 'build').")
 
 #MPI 
 FIND_PACKAGE(MPI REQUIRED)
 
 #BOOST
 SET(Boost_USE_STATIC_LIBS ON)
+SET(Boost_USE_MULTITHREADED OFF)
 FIND_PACKAGE(Boost COMPONENTS mpi serialization REQUIRED)
 
 #add sub directory
