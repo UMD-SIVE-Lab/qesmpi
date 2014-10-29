@@ -132,7 +132,7 @@ bool gpu_plume_job::eval_population_fitness(population &pop)
         bool (*func)(population & pop);
         char *error;
 
-        char *lib = "./libfitness.so";
+        char *lib = "./lib/build/libfitness.so";
 
         dl_handle = dlopen( lib, RTLD_LAZY );
         if (!dl_handle)
