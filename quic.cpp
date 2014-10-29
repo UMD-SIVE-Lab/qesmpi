@@ -2,6 +2,7 @@
 #include "iostream"
 #include "sstream"
 #include "fstream"
+#include "math.h"
 
 //framerworks headers
 #include "boost/mpi.hpp"
@@ -263,8 +264,7 @@ int main(int argc, char  *argv[])
 
                 required_servants = population_size;
             }
-
-            int each_servant_work_size = population_size / total_servants;
+            int each_servant_work_size = ceil((float)population_size / total_servants);
 
             log.debug("Population size: " , pop.size());
             log.debug("Number of servants working: " , required_servants );
@@ -291,8 +291,8 @@ int main(int argc, char  *argv[])
             servant = 1;
             while ((next = pop.get_subset(next, each_servant_work_size, subset)) != -1)
             {
+                log.debug(mastername, "sening work to servant:", servant);
                 world.send(servant, POPULATION, subset);
-                log.debug(mastername, "sent work to servant:", servant);
                 subset.clear();
                 world.isend(servant, EXIT);
                 servant++;
