@@ -1,0 +1,1 @@
+g++ -c -fPIC -std=c++11 fitness_function.cpp -o fitness.og++ -shared -o fitness.o libfitness.so

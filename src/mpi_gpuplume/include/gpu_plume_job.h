@@ -6,14 +6,14 @@
 #include "boost/serialization/vector.hpp"
 #include "logger/logger.h"
 
-#include "job.h"
-#include "namedOptParam.h"
-#include "dependencyOptParam.h"
-#include "population.h"
+#include "MPI_framework/job.h"
+#include "utils/namedOptParam.h"
+#include "utils/dependencyOptParam.h"
+#include "utils/population.h"
 #include "quicutil/QUICProject.h"
-#include "directory.h"
-#include "FitnessCache.h"
-#include "solver.h"
+#include "utils/directory.h"
+#include "utils/FitnessCache.h"
+#include "utils/solver.h"
 
 using namespace sivelab;
 namespace  sivelab

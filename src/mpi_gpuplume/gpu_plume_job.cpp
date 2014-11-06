@@ -9,9 +9,9 @@
 #include <boost/lexical_cast.hpp>
 #include "boost/algorithm/string.hpp"
 
-#include "gpu_plume_job.h"
-#include "population_gen.h"
-#include "concentrationRedux.h"
+#include "mpi_gpuplume/gpu_plume_job.h"
+#include "utils/population_gen.h"
+#include "utils/concentrationRedux.h"
 
 #include <dlfcn.h>
 
@@ -132,7 +132,7 @@ bool gpu_plume_job::eval_population_fitness(population &pop)
         bool (*func)(population & pop);
         char *error;
 
-        char *lib = "./lib/build/libfitness.so";
+        char *lib = "./fitness_lib/libfitness.so";
 
         dl_handle = dlopen( lib, RTLD_LAZY );
         if (!dl_handle)

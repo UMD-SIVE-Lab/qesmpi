@@ -1,4 +1,4 @@
-#include "directory.h"
+#include "utils/directory.h"
 
 //extern namedOptParam *lookupDataInRangeMap(unsigned int idx);
 ///adi: aimed at copying files and loading quqpdata which doesnt change at all :D

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <ostream>
 
-#include "population.h"
+#include "utils/population.h"
 using namespace std;
 
 // Helper function to generate a sample from a 1D gaussian distribution with

@@ -1,4 +1,4 @@
-#include "concentrationRedux.h"
+#include "utils/concentrationRedux.h"
 
 // 1) Identifying / removing emitter cells (I usually remove 3
 // cells). May be you can provide an option where the program asks the

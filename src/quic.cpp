@@ -11,8 +11,8 @@
 #include "logger/logger.h"
 
 //application headers
-#include "ArgumentParsing.h"
-#include "gpu_plume_job.h"
+#include "utils/ArgumentParsing.h"
+#include "mpi_gpuplume/gpu_plume_job.h"
 #include "OptFileGrammarLexer.hpp"
 #include "OptFileGrammarParser.hpp"
 

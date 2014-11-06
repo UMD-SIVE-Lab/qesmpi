@@ -1,4 +1,4 @@
-#include "population_gen.h"
+#include "utils/population_gen.h"
 
 #include <algorithm>
 populationGenerator::populationGenerator(population full_pop_)

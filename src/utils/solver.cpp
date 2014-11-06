@@ -2,9 +2,10 @@
 #include <list>
 #include <cstdlib>
 #include <cstdio>
-#include "samples.h"
-#include "solver.h"
-#include "AS047.h"
+#include "utils/population.h"
+#include "utils/solver.h"
+//check what this is
+//#include "AS047.h"
 #include <algorithm>
 #include <vector>
 

@@ -1,4 +1,4 @@
-#include "FitnessCache.h"
+#include "utils/FitnessCache.h"
 
 void FitnessCache::addToCache( const sample &s, double f )
 {
