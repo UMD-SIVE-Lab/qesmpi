@@ -22,6 +22,8 @@ FIND_PACKAGE(Boost COMPONENTS mpi serialization REQUIRED)
 add_subdirectory(opt_grammar)
 add_subdirectory(utils)
 add_subdirectory(mpi_gpuplume)
+add_subdirectory(mpi_qes_spf)
+
 
 #include_directories
 include_directories (${Boost_INCLUDE_DIRS})
@@ -56,4 +58,4 @@ target_link_libraries (quic sive-quicutil)
 target_link_libraries (quic sive-util) 
 target_link_libraries (quic optfileparser)
 target_link_libraries (quic mpi_gpuplume)
-
+#target_link_libraries (quic mpi_qes_spf)

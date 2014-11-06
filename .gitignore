@@ -2,7 +2,8 @@ build
 .svn
 *.out
 *sublime*
-opt_grammar/OptFileGrammar
-opt_grammar/OptFileGrammar*.hpp
-opt_grammar/OptFileGrammar*.cpp
+src/opt_grammar/OptFileGrammar
+src/opt_grammar/OptFileGrammar*.hpp
+src/opt_grammar/OptFileGrammar*.cpp
+lib/
 
