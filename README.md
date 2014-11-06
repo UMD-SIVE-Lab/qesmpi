@@ -1,28 +1,31 @@
-__Directory Structure:__
+Directory Structure
+-------------------
+
 optimizationCode
-|docs  (documentation)
 
-|fitness_lib (fitness function shared lib)
+* docs  (documentation)
 
-|include (Contains symbolic links to include directories all libraries in src)
+* fitness_lib (fitness function shared lib)
 
-|inputs (sample optfiles and hostsfile)
+* include (Contains symbolic links to include directories all libraries in src)
 
-|src (source code)--|
+* inputs (sample optfiles and hostsfile)
 
-                    |MPI_Framework (Code which needs to be implemented by all jobs)
+* src (source code)--|
 
-                    |mpi_gpuplume  (GPU Plume code implementing MPI_framework)
+   * MPI_Framework (Code which needs to be implemented by all jobs)
 
-                    |opt_grammar   (ANTLR grammar for reading optimization files)
+   * mpi_gpuplume  (GPU Plume code implementing MPI_framework)
 
-                    |qes_spf_mpi   (TODO)
+   * opt_grammar   (ANTLR grammar for reading optimization files)
 
-                    |Utils (Utility code)
+   * qes_spf_mpi   (TODO)
 
-|thesisDoc(Thesis story)
+   * Utils (Utility code)
 
-|CMakeLists.txt (Top level cmake file)
+* thesisDoc(Thesis story)
 
-|README.md (you are reading it right now!)
+* CMakeLists.txt (Top level cmake file)
+
+* README.md (you are reading it right now!)
 
