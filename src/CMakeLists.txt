@@ -1,15 +1,6 @@
 cmake_minimum_required (VERSION 2.8) 
 project (optimizationCode)
 
-#Setting compiler to use C++11
-#SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
-#SET (CMAKE_BUILD_TYPE Debug)
-
-#
-#	SIVELAB
-#
-#SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/../libsivelab" CACHE STRING "Path to the directory where the libsivelab repository is located (assumes code is built into a directory named 'build').")
-
 #MPI 
 FIND_PACKAGE(MPI REQUIRED)
 
@@ -19,8 +10,13 @@ SET(Boost_USE_MULTITHREADED OFF)
 FIND_PACKAGE(Boost COMPONENTS mpi serialization REQUIRED)
 
 #add sub directory
+message(STATUS "Adding opt_grammar directory...")
 add_subdirectory(opt_grammar)
+
+message(STATUS "Adding utils directory...")
 add_subdirectory(utils)
+
+message(STATUS "Adding mpi_gpuplume directory...")
 add_subdirectory(mpi_gpuplume)
 add_subdirectory(mpi_qes_spf)
 
