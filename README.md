@@ -6,6 +6,15 @@
 .../optimizationCode/build$ make
 ```
 
+##Run instructions##
+```
+.../optimizationCode/build$ cd src
+.../optimizationCode/build/src$ mpirun -np {no. of processes to be created} --machinefile {file containing the list of slaves} ./quic --optfile={path to optimization file} --loglevel={info, debug, error}
+
+eg.
+mpirun -np 10 -v --machinefile ../../inputs/machines.txt   ./quic --optfile=../../inputs/optfiles/optTest8D_LSM_job_antlr_tiny.opt --loglevel=info
+
+```
 Directory Structure
 -------------------
 
