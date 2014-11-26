@@ -66,10 +66,11 @@ class directory
     private:
         logger log;
     public:
-        std::vector<file>  dir;
+        std::vector<file*>  dir;
         std::string outputDir;
         std::string projFileName;
         int counter;
+      
         //see if its possible to compare two samples there by storing one here we can eliminate one of them :D  using sample we  can change the required dirty bits or else initially every data that needs to change is changed
 
         void intialRun(std::string outdir, std::string quicPath, sivelab::QUICProject &quqpData, std::string projfileName1);
@@ -77,16 +78,16 @@ class directory
         ~directory();
         //directory(std::string,std::string,quqpdata &,std::string);
         void copyFile(const std::string &, const std::string &);
-        void augmentBuildingDataFromSample( const sample &s, quBuildings &bData );
-        void validate_QU_buildings(const sample &, sivelab::QUICProject &);
-        void validate_sensor1(sivelab::QUICProject &, const float);
-        void validate_QP_source(sivelab::QUICProject &);
-        void validate_QP_params(sivelab::QUICProject &);
-        void validateDir(const sample &, sivelab::QUICProject &, const float);
-        void createOutputDir(const sample &, std::string outDirPath, sivelab::QUICProject &, std::string projFileName1, string QUICURB_EXE_PATH, string QUICPLUME_EXE_PATH, bool useNumParticleSet, bool useTimeStepSet, int numParticle, float timeStep);
+        // void augmentBuildingDataFromSample( const sample &s, quBuildings &bData );
+        // void validate_QU_buildings(const sample &, sivelab::QUICProject &);
+        // void validate_sensor1(sivelab::QUICProject &, const float);
+        // void validate_QP_source(sivelab::QUICProject &);
+        // void validate_QP_params(sivelab::QUICProject &);
+        // void validateDir(const sample &, sivelab::QUICProject &, const float);
+        // void createOutputDir(const sample &, std::string outDirPath, sivelab::QUICProject &, std::string projFileName1, string QUICURB_EXE_PATH, string QUICPLUME_EXE_PATH, bool useNumParticleSet, bool useTimeStepSet, int numParticle, float timeStep);
 
 
-        void createOutputDirectory(float windAngle, std::vector<std::string> &dataStructureNames, sivelab::QUICProject &quqpData, string QUICURB_EXE_PATH, string QUICPLUME_EXE_PATH, bool useNumParticleSet, bool useTimeStepSet, int numParticle, float timeStep);
+       // void createOutputDirectory(float windAngle, std::vector<std::string> &dataStructureNames, sivelab::QUICProject &quqpData, string QUICURB_EXE_PATH, string QUICPLUME_EXE_PATH, bool useNumParticleSet, bool useTimeStepSet, int numParticle, float timeStep);
         void validateOutputDir(std::vector<std::string> &, sivelab::QUICProject &quqpData);
         /////TODO": Note the wind the number of particles and the time step are random . Think about which ones are needed
 

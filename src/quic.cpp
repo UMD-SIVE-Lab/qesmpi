@@ -11,11 +11,16 @@
 #include "logger/logger.h"
 
 //application headers
+//use the ArgumentParsing.h in libsivelab. For now I have just renamed the class as I am getting compile errors
 #include "utils/ArgumentParsing.h"
-#include "mpi_gpuplume/gpu_plume_job.h"
+
+#include "utils/opt_params.h"
+#include "utils/population_gen.h"
+#include "MPI_framework/job.h"
+//#include "mpi_gpuplume/gpu_plume_job.h"
 #include "OptFileGrammarLexer.hpp"
 #include "OptFileGrammarParser.hpp"
-
+#include "mpi_qes_spf/simpleLSM_job.h"
 //using namespaces
 using namespace std;
 using namespace boost;
@@ -27,17 +32,17 @@ constexpr int MASTER = 0;
 
 enum  MESSAGE_TYPE
 {
-    JOB_DATATYPE, JOB_OBJECT, POPULATION, EXIT
+    JOB_DATATYPE, OPT_PARAMS, POPULATION, EXIT
 };
 
 //modify this as new jobs are added
 enum JOB_TYPE
 {
-    GPU_PLUME, INVALID_JOB
+    GPU_PLUME_JOB, SIMPLE_LSM_JOB, INVALID_JOB
 };
 
 //modify this as new jobs are added
-typedef boost::variant<gpu_plume_job> ANY_JOB;
+//typedef boost::variant<gpu_plume_job> ANY_JOB;
 
 
 /*
@@ -144,7 +149,7 @@ int main(int argc, char  *argv[])
 
     const string mastername = "Rias Gremory";
 
-    ArgumentParsing argParser;
+    ArgumentParser argParser;
     argParser.reg("version", 'v', no_argument);
     argParser.reg("solver", 's', required_argument);
     argParser.reg("numsamples", 'n', required_argument);
@@ -237,23 +242,37 @@ int main(int argc, char  *argv[])
 
 
         //peek into optfile or take a commandline argument and change this appropriately
-        map<string, map<string, string>> optParams;
-        readOptimizationFile(optimizationFile, optParams);
-        log.debug("job type: ", optParams["job_type"]["rval"]);
-        if (optParams["job_type"]["rval"] != "")
+        map<string, map<string, string>> optParamsMap;
+        readOptimizationFile(optimizationFile, optParamsMap);
+        opt_params optParams;
+        optParams.readParams(optParamsMap);
+
+        log.debug("job type: ", optParamsMap["job_type"]["rval"]);
+        if (optParamsMap["job_type"]["rval"] != "")
         {
-            JOB_TYPE job_type = GPU_PLUME;
-
-            job *temp = NULL;
-            ANY_JOB v;
-            v = gpu_plume_job(optParams);
-            if (job_type == GPU_PLUME)
+            string job_received = optParamsMap["job_type"]["rval"];
+            JOB_TYPE job_type;
+            if (job_received == "lsm")
+                job_type = SIMPLE_LSM_JOB;
+            else if (job_received == "gpu_plume")
+                job_type = GPU_PLUME_JOB;
+            else
             {
-
-                temp = &boost::get<gpu_plume_job>(v);
+                log.error("Unrecognized job, exiting");
+                exit(1);
             }
-            class job &job = *temp;
-            population pop = job.get_population();
+
+            long numDimensions = optParams.minValues.size();
+            vector< int > steps(numDimensions);
+            for (unsigned int i = 0; i < numDimensions; i++)
+            {
+                steps[i] = (((int)optParams.maxValues[i] - (int)optParams.minValues[i]) / (int)optParams.stepValues[i]) + 1;  // (int)maxValues[i] - (int)minValues[i] + 1;
+                log.debug("setting steps to ", steps[i]);
+            }
+
+            populationGenerator popgen(optParams.minValues, optParams.maxValues, steps, optParams.setValues);
+            population pop = popgen.generate_all_pop();
+            //check if population  is generated correctly
 
             //distribute work to clients assuming they are homogeneous
             int population_size = pop.size();
@@ -279,10 +298,10 @@ int main(int argc, char  *argv[])
             }
             log.debug("Finished sending job types");
 
-            //send job object to all servants
+            //send optimization parameters to all servants
             for (servant = 1; servant <= total_servants; servant++)
             {
-                world.send(servant, JOB_OBJECT, v);
+                world.send(servant, OPT_PARAMS, optParams);
             }
             log.debug("Finished sending job objects");
             //send work for each servant
@@ -319,8 +338,7 @@ int main(int argc, char  *argv[])
         string base_proj_innerpath = "";
         JOB_TYPE job_type = INVALID_JOB;
         job *temp = NULL;
-        //this creates a quic project which is empty it throws a bunch of warning messages
-        ANY_JOB v;
+        opt_params optParams;
         while (true)
         {
 
@@ -336,19 +354,25 @@ int main(int argc, char  *argv[])
                 world.recv(status.source(), JOB_DATATYPE, job_type);
                 log.debug("Received job type", job_type);
             }
-            else if (status.tag() == JOB_OBJECT)
+            else if (status.tag() == OPT_PARAMS)
             {
 
-                world.recv(status.source(), JOB_OBJECT, v);
-                if (job_type == GPU_PLUME)
+                world.recv(status.source(), OPT_PARAMS, optParams);
+                //instantiate a job depending on job type
+                //We wait until the optparams are available to instantiate the job
+                if (job_type == SIMPLE_LSM_JOB)
+                    temp = new simpleLSM_job(optParams);
+                // else if(job_type == GPU_PLUME_JOB)
+                //     temp = new gpu_plume_job(optParams);
+                else
                 {
-                    temp = &boost::get < gpu_plume_job>(v);
-                    log.debug("Received job object");
-                    //temp->printOptimizationParams();
+                    log.error("Unrecognized job, exiting");
+                    exit(1);
                 }
-                if (temp == NULL)
-                    log.debug("temp is NULL");
-                //temp->printOptimizationParams();
+
+                log.debug("Received optimization parameters object");
+                //optParams.printOptimizationParams();
+
             }
             else
             {
@@ -366,7 +390,7 @@ int main(int argc, char  *argv[])
                 std::string output_location;
                 {
                     stringstream ss;
-                    ss << "/tmp/workingDir_";
+                    ss << "/scratch/workingDir_";
                     ss << world.rank();
                     output_location = ss.str();
                     ss.clear();
@@ -619,7 +643,7 @@ int main(int argc, char  *argv[])
                 char pwd[FILENAME_MAX];
                 getcwd(pwd, sizeof(pwd));
                 log.debug("Current working directory", pwd);
-                
+
 
                 //otherwise we receive population subset need to perform the calculations
                 world.recv(status.source(), POPULATION, pop);

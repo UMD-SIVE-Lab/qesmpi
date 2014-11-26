@@ -16,8 +16,18 @@ add_subdirectory(opt_grammar)
 message(STATUS "Adding utils directory...")
 add_subdirectory(utils)
 
-message(STATUS "Adding mpi_gpuplume directory...")
-add_subdirectory(mpi_gpuplume)
+#fitness function shared library location
+add_definitions( -DFITNESS_FUNCTION_LIBRARY="${CMAKE_BINARY_DIR}/fitness_lib/libfitness.so" )
+add_definitions( -DFITNESS_FUNCTION_NAME="fitness_function" )
+
+message(STATUS "Adding MPI framework directory...")
+add_subdirectory(MPI_framework)
+
+#message(STATUS "Adding MPI gpuplume directory...")
+#add_subdirectory(mpi_gpuplume)
+
+
+message(STATUS "Adding MPI LSM directory...")
 add_subdirectory(mpi_qes_spf)
 
 
@@ -25,9 +35,11 @@ add_subdirectory(mpi_qes_spf)
 include_directories (${Boost_INCLUDE_DIRS})
 include_directories (${MPI_CXX_INCLUDE_PATH})
 include_directories (${LIBSIVELAB_PATH}) 
-include_directories (${CMAKE_SOURCE_DIR}/include) 
+include_directories (${CMAKE_SOURCE_DIR}/include)
+include_directories (${CMAKE_SOURCE_DIR}/fitness_lib/include) 
 include_directories (opt_grammar)
 include_directories (opt_grammar/antlr)
+include_directories (${QES_INCLUDE_DIRECTORIES})
 
 #
 #add code such that cmake automatically compiles lexer and parser
@@ -50,8 +62,13 @@ add_executable(quic quic.cpp)
 #libraries 
 target_link_libraries (quic ${MPI_LIBRARIES})
 target_link_libraries (quic ${Boost_LIBRARIES})
+target_link_libraries (quic optfileparser)
+#target_link_libraries (quic mpi_gpuplume)
+target_link_libraries (quic mpi_simpleLSM)
+target_link_libraries (quic mpi_framework)
+target_link_libraries (quic optm-utils)
 target_link_libraries (quic sive-quicutil)
 target_link_libraries (quic sive-util) 
-target_link_libraries (quic optfileparser)
-target_link_libraries (quic mpi_gpuplume)
+
+
 #target_link_libraries (quic mpi_qes_spf)

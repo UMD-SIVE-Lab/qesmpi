@@ -9,20 +9,20 @@
 
 #include "utils/ArgumentParsing.h"
 
-ArgumentParsing::ArgumentParsing()
+ArgumentParser::ArgumentParser()
 {
 }
 
-ArgumentParsing::ArgumentParsing(int argc, char *argv[])
+ArgumentParser::ArgumentParser(int argc, char *argv[])
 {
   process(argc, argv);
 }
 
-ArgumentParsing::~ArgumentParsing()
+ArgumentParser::~ArgumentParser()
 {
 }
 
-void ArgumentParsing::reg(const std::string& argName, char shortArgName, int has_argument, bool required)
+void ArgumentParser::reg(const std::string& argName, char shortArgName, int has_argument, bool required)
 {
   ModifiedOption nextArg;
 
@@ -40,7 +40,7 @@ void ArgumentParsing::reg(const std::string& argName, char shortArgName, int has
   m_ArgVector.push_back(nextArg);
 }
 
-bool ArgumentParsing::isSet(const std::string& argName)
+bool ArgumentParser::isSet(const std::string& argName)
 {
   for (unsigned int i=0; i<m_ArgVector.size(); ++i)
   {
@@ -50,7 +50,7 @@ bool ArgumentParsing::isSet(const std::string& argName)
   return false;
 }
 
-bool ArgumentParsing::isSet(const std::string& argName, std::string &argValue)
+bool ArgumentParser::isSet(const std::string& argName, std::string &argValue)
 {
   for (unsigned int i=0; i<m_ArgVector.size(); ++i)
     if ((argName.compare(m_ArgVector[i].optParams.name) == 0) && (m_ArgVector[i].isSet))
@@ -63,7 +63,7 @@ bool ArgumentParsing::isSet(const std::string& argName, std::string &argValue)
   return false;
 }
 
-int ArgumentParsing::process(int argc, char *argv[])
+int ArgumentParser::process(int argc, char *argv[])
 {
   // convert the vector into a temporary option struct needed for getopt_long
   option *getoptOptions = new option[m_ArgVector.size()];

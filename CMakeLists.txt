@@ -18,6 +18,17 @@ SET( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules" ${CMAKE_MODUL
 message(STATUS "Adding qes-v1 directory...")
 add_subdirectory(qes-v1)
 
+#do this for LSM or ${QES_INCLUDE_DIRECTORIES}
+#
+#	Make some directories that are used by the system
+#	when dumping build files and simulation output
+#
+file( MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/programs" ) # for ptx files
+file( MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/output" )
+add_definitions( -DQES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}/output" ) # QES_OUTPUT_DIR
+add_definitions( -DQES_PTX_DIR="${CMAKE_CURRENT_BINARY_DIR}/programs" ) # QES_PTX_DIR
+##end
+
 #Do not build QES code with -std=c++11, using c++11 for both nvcc and gcc throws "nullptr is undefined" compile error
 #Found solution here: http://choorucode.com/2014/02/18/nullptr-is-undefined-error-with-nvcc/
 #Setting compiler to use C++11

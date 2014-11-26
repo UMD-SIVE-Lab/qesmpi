@@ -8,7 +8,7 @@ populationGenerator::populationGenerator(population full_pop_)
 populationGenerator::populationGenerator(vector <double> min_domain_ , vector<double> max_domain_ , vector<int> steps_, vector <vector<double > > setvalues_)
 {
 
-    log = logger(ERROR, "populationGenerator");
+    log = logger(DEBUG, "populationGenerator");
 
     log.debug("ENTERD THE POPULATION GENERATOR CONSTRUCTOR");
     min_domain = min_domain_;

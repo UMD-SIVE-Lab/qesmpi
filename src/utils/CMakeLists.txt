@@ -9,5 +9,6 @@ add_library(optm-utils ArgumentParsing.cpp
 						population.cpp
 						solver.cpp
 						population_gen.cpp
-						concentrationRedux.cpp
+						#concentrationRedux.cpp
+						opt_params.cpp
 						)

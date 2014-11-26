@@ -21,12 +21,12 @@
 #include <getopt.h>
 #endif
 
-class ArgumentParsing
+class ArgumentParser
 {
 public:
-  ArgumentParsing();
-  ArgumentParsing(int argc, char *argv[]);
-  ~ArgumentParsing();
+  ArgumentParser();
+  ArgumentParser(int argc, char *argv[]);
+  ~ArgumentParser();
 
   void reg(const std::string& argName, char shortArgName, int has_argument, bool required=false);
   int processCommandLineArgs(int argc, char *argv[]) { return process(argc, argv); }
