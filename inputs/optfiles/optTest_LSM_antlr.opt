@@ -1,0 +1,6 @@
+const job_type='lsm'
+const BaseProjectPath = '..//..//quicdata//2by2_q572_270//2by2_q572_270_inner'            ////should write this 
+const  Solver = 'BruteForce'
+quBuildings.buildings[3].xfo = [20:1:30]
+quBuildings.buildings[3].yfo = [20:1:30]
+

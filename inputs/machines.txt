@@ -1,5 +1,2 @@
-csdev01
-#csdev02
-csdev03
-csdev04
-csdev05
+ether
+tapio
