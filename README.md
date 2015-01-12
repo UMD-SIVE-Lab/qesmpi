@@ -2,7 +2,7 @@
 ```
 .../optimizationCode$ mkdir build
 .../optimizationCode$ cd build
-.../optimizationCode/build$ cmake  -DOptiX_INSTALL_DIR=/home/cs/software/sivelab/NVIDIA-OptiX-SDK-3.6.2-linux64 -DCUDA_TOOLKIT_ROOT_DIR=/home/cs/software/sivelab/cuda_6.0 ..
+.../optimizationCode/build$ cmake  -DCMAKE_BUILD_TYPE=RELEASE -DOptiX_INSTALL_DIR=/home/cs/software/sivelab/NVIDIA-OptiX-SDK-3.6.2-linux64 -DCUDA_TOOLKIT_ROOT_DIR=/home/cs/software/sivelab/cuda_6.0 ..
 .../optimizationCode/build$ make
 ```
 
