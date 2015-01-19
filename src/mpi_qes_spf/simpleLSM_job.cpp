@@ -4,6 +4,11 @@
 //#include "QESGui.h"
 
 //#include "ViewTracer.h"
+#include <boost/timer/timer.hpp>
+
+// this is wallclock AND cpu time
+
+
 
 
 bool simpleLSM_job::eval_population_fitness(population &pop)
@@ -11,11 +16,22 @@ bool simpleLSM_job::eval_population_fitness(population &pop)
     char pwd[FILENAME_MAX];
     getcwd(pwd, sizeof(pwd));
     log.debug("Current working directory", pwd);
+    float cputime=0;
+    float walltime=0;
     for (sample &s : pop)
     {
         prepare_work_dir_for_sample(s);
+        boost::timer::cpu_timer timer;
         eval_sample_fitness(s);
+        boost::timer::cpu_times elapsed = timer.elapsed();
+        log.debug(" CPU TIME: ",  (elapsed.user + elapsed.system) / 1e9, " seconds", ", WALLCLOCK TIME: ", elapsed.wall / 1e9, " seconds");
+        cputime+=((elapsed.user + elapsed.system) / 1e9);
+        walltime+=(elapsed.wall / 1e9);
+
     }
+
+    log.debug("total CPU TIME:", cputime, "total WALLCLOCK TIME:", walltime);        
+    log.debug("avergae CPU TIME:", cputime/pop.size(), "avergae WALLCLOCK TIME:", walltime/pop.size());
     return true;
 }
 
@@ -43,6 +59,8 @@ bool simpleLSM_job::eval_sample_fitness( sample &s)
     // Now that we've added all the models we want to use and created
     // our scene, it's time to initialize and compile the system. This
     // will return false if there is a problem.
+    //context.getVariableTracker()->setBool("verbose_output", false);
+
     if ( !context.initialize() )
     {
         return EXIT_FAILURE;
@@ -51,10 +69,28 @@ bool simpleLSM_job::eval_sample_fitness( sample &s)
     //  runDiurnalCycle( &context );
 
     // Run a simulation.
-    if ( !context.runSimulation() )
+	//may be get this from opt file
+	qes::SunTracker *g_sunTracker = context.getSunTracker();
+
+	int minute_interval = 1;
+    g_sunTracker->updateTimeByMinutes( -minute_interval ); // just to handle the first iteration
+    for ( int min = 0; min <= 2; min += minute_interval )
     {
-        return EXIT_FAILURE;
+
+    	log.debug("running simulation ", min+1, "th time");
+        // This just adds n number of minutes to the current time.
+        g_sunTracker->updateTimeByMinutes( minute_interval );
+
+        // Run simulation
+        if ( !context.runSimulation() )
+        {
+            return EXIT_FAILURE;
+        }
     }
+    // if ( !context.runSimulation() )
+    // {
+    //     return EXIT_FAILURE;
+    // }
 
     // Now we will do something a bit more fun.
     // QUIC EnvSim has a default visualizer, and it's really easy to use.
@@ -71,9 +107,10 @@ bool simpleLSM_job::eval_sample_fitness( sample &s)
 
 
     // Exit the program. The QESContext takes care of all the cleanup!
-    fitness_function(s, &context);
-    return EXIT_SUCCESS;
-
+    
+    if(fitness->eval_fitness(s, &context))
+        return EXIT_SUCCESS;
+    else return EXIT_FAILURE;
 }
 
 
@@ -103,9 +140,9 @@ bool simpleLSM_job::loadScene( qes::QESContext *context )
 
     // Before we run our simulation we should set it to a time where
     // the radiation model isn't full of errors. Let's do 2pm.
-    int hour = 14; int minute = 0; int second = 0;
-    g_sunTracker->setTimeLocal( hour, minute, second );
-    g_sunTracker->setDate( 2011, 10, 1 );
+    int hour = 20; int minute = 0; int second = 0;
+    g_sunTracker->setTimeUTC( hour, minute, second );
+    g_sunTracker->setDate( 2014, 9, 15 );
 
     // We need to give our models input. This is done through the InputTracker
     // in the form of surface weather map (SWM) xml files. Each file contains

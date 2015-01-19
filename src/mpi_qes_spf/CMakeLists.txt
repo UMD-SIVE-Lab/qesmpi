@@ -31,4 +31,5 @@ target_link_libraries( mpi_simpleLSM QESLSM QESViewfactor )
 target_link_libraries (mpi_simpleLSM optm-utils)
 target_link_libraries (mpi_simpleLSM dl)
 target_link_libraries (mpi_simpleLSM mpi_framework)
-
+message(STATUS ${Boost_LIBRARIES})
+target_link_libraries (mpi_simpleLSM ${Boost_LIBRARIES})

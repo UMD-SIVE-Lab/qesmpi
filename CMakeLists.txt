@@ -4,7 +4,7 @@ project (optimizationCode)
 
 SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/../libsivelab")
 SET(QUIC_DATA_PATH "${CMAKE_SOURCE_DIR}/../quicdata")
-SET(QES_ROOT_DIR "${CMAKE_SOURCE_DIR}/qes-v1")
+SET(QES_ROOT_DIR "${CMAKE_SOURCE_DIR}/quic_envsim")
 
 #Build QES libraries only
 set(BUILD_LIBS_ONLY "TRUE")
@@ -15,8 +15,8 @@ set(BUILD_LIBS_ONLY "TRUE")
 #
 SET( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules" ${CMAKE_MODULE_PATH} )
 
-message(STATUS "Adding qes-v1 directory...")
-add_subdirectory(qes-v1)
+message(STATUS "Adding quic_envsim directory...")
+add_subdirectory(quic_envsim)
 
 #do this for LSM or ${QES_INCLUDE_DIRECTORIES}
 #
@@ -41,3 +41,13 @@ add_subdirectory(fitness_lib)
 
 message(STATUS "Adding src directory...")
 add_subdirectory(src)
+
+message(STATUS "Adding test directory...")
+#########################
+# GTest
+#########################
+set(gtest_SOURCE_DIR lib/google_test)
+add_subdirectory( ${gtest_SOURCE_DIR} )
+enable_testing()
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+add_subdirectory(test)
