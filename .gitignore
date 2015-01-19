@@ -6,4 +6,6 @@ src/opt_grammar/OptFileGrammar
 src/opt_grammar/OptFileGrammar*.hpp
 src/opt_grammar/OptFileGrammar*.cpp
 lib/
+*.DS_Store
+*._.DS_Store
 

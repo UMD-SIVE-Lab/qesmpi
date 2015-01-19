@@ -24,6 +24,8 @@ namespace  sivelab
     {
         private:
             void *dl_handle;
+			Fitness* (*create)(QUICProject&, opt_params&);
+			void (*destroy)(Fitness*);
 
         public:
             opt_params optParams;
@@ -31,23 +33,30 @@ namespace  sivelab
             logger log;
             QUICProject quqpData;
             directory workDir;
-            fitness_func_type fitness_function;
+			Fitness* fitness;
 
             job(const opt_params &optParams_): optParams(optParams_), log(DEBUG, "job")
             {
 
+                //setup_environment
                 //TODO: Do error handling
                 char *error;
 
                 char lib[] = FITNESS_FUNCTION_LIBRARY;
 
-                dl_handle = dlopen( lib, RTLD_LAZY );
+                dl_handle = dlopen(lib, RTLD_LAZY );
                 if (!dl_handle)
                 {
                     printf( "!!! %s\n", dlerror() );
                 }
-                char method_name[] = FITNESS_FUNCTION_NAME;
-                fitness_function = (fitness_func_type) dlsym( dl_handle, method_name );
+                //these are made pointer as nx, ny, etc are not available in quqpData yet. They are filled in once
+                //setup environment is finished, hence sending a reference
+				create = (Fitness* (*) (QUICProject&, opt_params&))dlsym(dl_handle, "create_object");
+				destroy = (void (*)(Fitness*))dlsym(dl_handle, "destroy_object");
+
+				//fetch these from optparams
+
+				fitness = (Fitness*) create(quqpData, optParams);
 
                 error = dlerror();
                 if (error != NULL)
@@ -58,6 +67,7 @@ namespace  sivelab
             }
             virtual ~job()
             {
+				destroy(fitness);
                 dlclose( dl_handle );
             }
             virtual bool eval_population_fitness( population &pop ) = 0;

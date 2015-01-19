@@ -6,9 +6,10 @@
 #include <vector>
 #include <iostream>
 #include <ostream>
-
+#include "map"
 
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/map.hpp>
 
 
 #include "logger/logger.h"
@@ -73,7 +74,7 @@ class sample : public pt
         }
     public:
 
-        double fitness;
+        std::map<string, double> fitness;
 
         sample();
         sample(int dimension);

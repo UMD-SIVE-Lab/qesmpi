@@ -179,18 +179,20 @@ sample::~sample()
 double
 sample::eval_sample( double (*eval_func)( sample &s ) )
 {
-    this->fitness = eval_func(*this);
+    //this->fitness = eval_func(*this);
 }
 
 ostream &operator<<( ostream &os, sample &s )
 {
     os << "{";
     os << " coord: ";
-    for (unsigned int i = 0; i < s.size() - 1; i++ )
+    for (unsigned int i = 0; i < s.size(); i++ )
         os << s[i] << ", ";
     if ( s.size() > 0 )
-        os << s[s.size() - 1] << " fitness: " << s.fitness;
-    os << " }";
+        for(auto& entry: s.fitness){
+            os<<entry.first<<": "<<entry.second<<", ";
+        }
+    os << "}";
 }
 
 population &
@@ -255,11 +257,11 @@ population::randomize_samples( vector< double > &domain_min, vector< double > &d
 double
 population::sum_fitnesses()
 {
-    double sum = 0.0;
-    for (unsigned int i = 0; i < size(); i++ )
-        sum += (*this)[i].fitness;
+    // double sum = 0.0;
+    // for (unsigned int i = 0; i < size(); i++ )
+    //     sum += (*this)[i].fitness;
 
-    return sum;
+    // return sum;
 }
 
 void

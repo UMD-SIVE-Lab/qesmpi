@@ -7,7 +7,7 @@ FIND_PACKAGE(MPI REQUIRED)
 #BOOST
 SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREADED OFF)
-FIND_PACKAGE(Boost COMPONENTS mpi serialization REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS mpi serialization timer chrono REQUIRED)
 
 #add sub directory
 message(STATUS "Adding opt_grammar directory...")
@@ -57,6 +57,8 @@ LINK_DIRECTORIES (${LIBSIVELAB_PATH}/lib)
 # 					samples.cpp
 # 					directory.cpp
 # 				)
+
+message(STATUS "Linking the executable with necessary libraries")
 add_executable(quic quic.cpp)
 
 #libraries 

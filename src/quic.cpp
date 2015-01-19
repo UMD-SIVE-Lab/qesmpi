@@ -8,6 +8,7 @@
 #include "boost/mpi.hpp"
 #include "boost/variant.hpp"
 #include "boost/serialization/variant.hpp"
+#include <boost/timer/timer.hpp>
 #include "logger/logger.h"
 
 //application headers
@@ -32,7 +33,7 @@ constexpr int MASTER = 0;
 
 enum  MESSAGE_TYPE
 {
-    JOB_DATATYPE, OPT_PARAMS, POPULATION, EXIT
+    JOB_DATATYPE, OPT_PARAMS, POPULATION, RESULTS, EXIT
 };
 
 //modify this as new jobs are added
@@ -320,7 +321,59 @@ int main(int argc, char  *argv[])
 
             //pop.print();
             log.info(mastername, "distributed work to all servants, waiting for results");
-            world.probe(1, mpi::any_tag);
+            long results_to_received = pop.size();
+            population results;
+            log.debug("Expecting a total of ", pop.size());
+            while(results_to_received!=0){
+                log.debug("waiting for slaves");
+            	mpi::status msg = world.probe(mpi::any_source, RESULTS);
+            	population temp_results;
+            	world.recv(msg.source(), RESULTS, temp_results);
+                log.debug("received ", temp_results.size(), "from", msg.source());
+            	results.insert( results.end(), temp_results.begin(), temp_results.end());
+            	results_to_received -= temp_results.size();
+                log.debug("received ", results.size(), "results out of ", pop.size(), "until now");
+
+            }
+            ///optimization function
+            float min_avg_temperature = 9999;
+            float min_temperature = 9999;
+            vector<sample> min_avg_samples;
+            vector<sample> min_samples;
+            for(sample&s : results){
+                float temp_min_avg_temperature = s.fitness["patch_avg_temperature"];
+                float temp_min_temperature = s.fitness["patch_min_temperature"];
+                if(min_avg_temperature>=temp_min_avg_temperature){
+                    if(min_avg_temperature>temp_min_avg_temperature)
+                        min_avg_samples.clear();
+                    min_avg_temperature = temp_min_avg_temperature;
+                    min_avg_samples.push_back(s);
+                }
+                if(min_temperature>=temp_min_temperature){
+                    if(min_temperature>temp_min_temperature)
+                        min_avg_samples.clear();
+                    min_temperature = temp_min_temperature;
+                    min_samples.push_back(s);
+                }
+            }
+
+            ///
+            log.debug("sending exit signal to all clients");
+            for (int servant = 1; servant < world.size(); servant++)
+            {
+                world.send( servant, EXIT);
+            }
+            log.debug("sent exit signal to all clients");
+
+            log.info("min average samples");
+            for(sample& s: min_avg_samples){
+                log.debug(s);
+            }
+            log.info("min samples");
+            //for(sample& s: min_samples){
+            //    log.debug(s);
+            //}
+            
         }
         else
         {
@@ -384,7 +437,6 @@ int main(int argc, char  *argv[])
                 world.recv(status.source(), POPULATION, pop);
                 log.debug(mastername, "\b's servant" , world.rank(), "received work of size:" , pop.size() );
                 //pop.print();
-
                 class job &job = *temp;
 
                 std::string output_location;
@@ -414,10 +466,13 @@ int main(int argc, char  *argv[])
                 else
                 {
                     log.debug("Servant", world.rank(), "Population fitness evaluation DONE");
-                    for (auto &sample : pop)
-                    {
-                        log.debug("Servant", world.rank(), sample);
-                    }
+                    // for (auto &s: pop)
+                    // {
+                    //     log.debug("Servant", world.rank(), s);
+                    // }
+					world.send( MASTER, RESULTS, pop);
+					log.debug("Servant", world.rank(), "send results to master DONE");
+
                 }
 
             }
