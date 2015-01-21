@@ -208,7 +208,7 @@ unit
     | comment 
              {
               //std::cout<<"comment statement: "<<$comment.text;
-                            each_line["type"] = "comment";
+                            //each_line["type"] = "comment";
              }
   )
   EOF
@@ -383,6 +383,9 @@ vector
 
 str
   :
+  String;
+
+String:
   '\''
   ~(
     '\r'
