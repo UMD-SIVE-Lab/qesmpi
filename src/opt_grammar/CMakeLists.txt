@@ -1,8 +1,7 @@
 cmake_minimum_required (VERSION 2.6) 
 project (OptimizationFileAntlrParser)
 
-include_directories (${CMAKE_CURRENT_SOURCE_DIR}/antlr)
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/antlr)
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/OptFileGrammarParser.cpp 
 							${CMAKE_CURRENT_SOURCE_DIR}/OptFileGrammarParser.hpp
@@ -18,3 +17,4 @@ add_library(optfileparser OptFileGrammarParser.cpp
 						  OptFileGrammar.g
 						  )
 
+SET(ANTLR_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/antlr PARENT_SCOPE)
