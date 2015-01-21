@@ -19,8 +19,8 @@
 #include "utils/population_gen.h"
 #include "MPI_framework/job.h"
 //#include "mpi_gpuplume/gpu_plume_job.h"
-#include "OptFileGrammarLexer.hpp"
-#include "OptFileGrammarParser.hpp"
+#include "opt_grammar/OptFileGrammarLexer.hpp"
+#include "opt_grammar/OptFileGrammarParser.hpp"
 #include "mpi_qes_spf/simpleLSM_job.h"
 //using namespaces
 using namespace std;
@@ -114,7 +114,9 @@ void readOptimizationFile(string optfile, map < string, map<string, string>>   &
                 {
                     log.debug(itr.first, " : ", itr.second, ", ");
                 }
-                optParams[parser.each_line["lval"]] = parser.each_line;
+                if(parser.each_line.size()!=0){
+                    optParams[parser.each_line["lval"]] = parser.each_line;
+                }
             }
         }
         line_number++;
