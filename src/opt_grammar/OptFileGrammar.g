@@ -33,7 +33,8 @@ class OptFileGrammarLexer;
 
 @lexer::context {
 bool error_in_lexer = false;
-  void displayRecognitionError( ANTLR_UINT8** , ExceptionBaseType* ex);
+StringStreamType  err_stream;
+void displayRecognitionError( ANTLR_UINT8** , ExceptionBaseType* ex);
 }
 
 @lexer::members {
@@ -68,13 +69,12 @@ void OptFileGrammarLexer::displayRecognitionError(ANTLR_UINT8** tokens, Lexer::E
               cerr<<"get_input()"<<exception->get_input()<<endl;
               cerr<<"get_message()"<<exception->get_message()<<endl;
           */
-              StringStreamType  err_stream;
-                    
+              err_stream.clear();        
               err_stream<< "Lexer error: " <<ex->get_message() << " at offset "
                    << ex->get_charPositionInLine()+1;     
               error_in_lexer = true;    
               
-              cerr<<err_stream.str()<<endl;   
+              //cerr<<err_stream.str()<<endl;   
           }
 }
 //this goes into header file
@@ -82,6 +82,8 @@ void OptFileGrammarLexer::displayRecognitionError(ANTLR_UINT8** tokens, Lexer::E
 @context {
 std::map<string, string> each_line;
   bool error_in_parser = false;
+  stringstream errtext;
+
   void displayRecognitionError(ANTLR_UINT8** tokens, Parser::ExceptionBaseType* exception);
 }
 //this goes into cpp file
@@ -117,11 +119,11 @@ void OptFileGrammarParser::displayRecognitionError(ANTLR_UINT8** tokens, Parser:
       cerr<<"get_input()"<<exception->get_input()<<endl;
       cerr<<"get_message()"<<exception->get_message()<<endl;
       */
-            stringstream errtext;
         // See if there is a 'filename' we can use
         //
         
         error_in_parser = true;
+        errtext.clear();
         errtext << "Parser Error: " << this->get_rec()->get_state()->get_exception()->get_message();
 
         // Prepare the knowledge we know we have
@@ -146,7 +148,7 @@ void OptFileGrammarParser::displayRecognitionError(ANTLR_UINT8** tokens, Parser:
           }
         }
 
-        cerr<<errtext.str();
+        //cerr<<errtext.str();
 
     }
   }
@@ -249,13 +251,15 @@ lvalue returns [std::map<string, string> lval]
           }
   | local_variable 
                   {
+                    cout<<$local_variable.text;
                    //do these exist at all? Yup they do exists see adityas code he parses them
                                     each_line["lval"] = $local_variable.text;
                                     each_line["lval_type"] = "project_variable";
                   }
   | member_variable 
                    {
-                    each_line["lval"] = $member_variable.text;
+                      cout<<$member_variable.text;
+                      each_line["lval"] = $member_variable.text;
                                     each_line["lval_type"] = "project_variable";
                    }
   ;
