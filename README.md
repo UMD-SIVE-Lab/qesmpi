@@ -40,6 +40,8 @@ optimizationCode
 
    * Utils (Utility code)
 
+* tests (Visit this if you have any questions)
+
 * thesisDoc(Thesis story)
 
 * CMakeLists.txt (Top level cmake file)
