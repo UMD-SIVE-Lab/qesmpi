@@ -98,6 +98,25 @@ TEST_F(OptFileParseTest, string_assignment) {
     ASSERT_EQ("string", current_map["rval_type"]);
 }
 
+//There are two type of variables project variables and control variables
+//Project variables specify changes to parameters etc
+//Control variables specify things that all simulations need like
+//base project path, type of solver to use etc
+TEST_F(OptFileParseTest, control_variable) {
+    string str = "const str='../this/is/a/path'";
+    OptfileContents<<str;
+    ASSERT_NE(-1, readOptimizationFile())<<"Expected error: : "<<error;
+    //there must be one entry in optparams
+    ASSERT_EQ(optParams.size(), 1);
+    auto current_map = optParams["str"];
+    ASSERT_EQ("str", current_map["lval"]);
+    
+    ASSERT_EQ("control", current_map["lval_type"]);
+    
+    ASSERT_EQ("../this/is/a/path", current_map["rval"]);
+    ASSERT_EQ("string", current_map["rval_type"]);
+}
+
 TEST_F(OptFileParseTest, empty_input) {
     string str = "";
     OptfileContents<<str;
@@ -205,3 +224,5 @@ TEST_F(OptFileParseTest, memeber_variable_of_array){
     ASSERT_EQ("23", current_map["rval"]);
     ASSERT_EQ("number", current_map["rval_type"]);
 }
+
+//test 
