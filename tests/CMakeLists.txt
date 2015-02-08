@@ -5,13 +5,14 @@ project (optimizationCode)
 # GTest
 #########################
 
-add_subdirectory( ${GTEST_SOURCE_DIR} ${CMAKE_BINARY_DIR}/lib/google_test)
+add_subdirectory(${GMOCK_SOURCE_DIR} ${CMAKE_BINARY_DIR}/lib/google_mock)
 
 link_directories(${CMAKE_BIN_DIR}/lib)
 
 enable_testing( )
 
 include_directories (${GTEST_SOURCE_DIR} ${GTEST_SOURCE_DIR}/include)
+include_directories (${GMOCK_SOURCE_DIR}/include)
 include_directories (${CMAKE_SOURCE_DIR}/include)
 include_directories (${CMAKE_SOURCE_DIR}/fitness_lib/include) 
 include_directories (${Boost_INCLUDE_DIRS})

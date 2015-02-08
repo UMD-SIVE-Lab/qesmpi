@@ -5,7 +5,9 @@ project (optimizationCode)
 SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/../libsivelab")
 SET(QUIC_DATA_PATH "${CMAKE_SOURCE_DIR}/../quicdata")
 SET(QES_ROOT_DIR "${CMAKE_SOURCE_DIR}/../quic_envsim")
-SET(GTEST_SOURCE_DIR "${CMAKE_SOURCE_DIR}/lib/google_test")
+SET(GMOCK_SOURCE_DIR "${CMAKE_SOURCE_DIR}/lib/gmock")
+SET(GTEST_SOURCE_DIR "${GMOCK_SOURCE_DIR}/gtest")
+
 #Build QES libraries only
 set(BUILD_LIBS_ONLY "TRUE")
 #Build unit tests
