@@ -127,7 +127,7 @@ bool opt_params::readParams(const std::map<string, map<string, string>> &optPara
 
     int namedParamIndex = 0;
     std::string s1;
-    cout << "optParams size: " << optParams.size() << endl;
+    log.debug("optParams size: ", optParams.size());
     for (auto &itr : optParams)
     {
         string variable_name = itr.first;
@@ -316,7 +316,7 @@ bool opt_params::readParams(const std::map<string, map<string, string>> &optPara
             np.type = "rangeValue";
             minValues.push_back(atof(values["min"].c_str()));
             maxValues.push_back(atof(values["max"].c_str()));
-            stepValues.push_back(atof(values["step"].c_str()));
+            stepValues.push_back(atoi(values["step"].c_str()));
             rangeOptMap.push_back(np);
 
             namedParamIndex++;
@@ -483,6 +483,7 @@ bool opt_params::readParams(const std::map<string, map<string, string>> &optPara
     // bool use_Population = false;
     //population filePopulation ;
     //std::string populationFile;
-    printOptimizationParams();
+
+    //printOptimizationParams();
 
 }

@@ -265,15 +265,7 @@ int main(int argc, char  *argv[])
                 exit(1);
             }
 
-            long numDimensions = optParams.minValues.size();
-            vector< int > steps(numDimensions);
-            for (unsigned int i = 0; i < numDimensions; i++)
-            {
-                steps[i] = (((int)optParams.maxValues[i] - (int)optParams.minValues[i]) / (int)optParams.stepValues[i]) + 1;  // (int)maxValues[i] - (int)minValues[i] + 1;
-                log.debug("setting steps to ", steps[i]);
-            }
-
-            populationGenerator popgen(optParams.minValues, optParams.maxValues, steps, optParams.setValues);
+            populationGenerator popgen(optParams.minValues, optParams.maxValues, optParams.stepValues, optParams.setValues);
             population pop = popgen.generate_all_pop();
             //check if population  is generated correctly
 
@@ -283,7 +275,6 @@ int main(int argc, char  *argv[])
             if (total_servants > population_size)
             {
                 log.debug("Excess servants, required only " , population_size , "servants");
-
                 required_servants = population_size;
             }
             int each_servant_work_size = ceil((float)population_size / total_servants);

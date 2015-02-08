@@ -65,7 +65,7 @@ namespace sivelab
             opt_params();
             std::vector<double> minValues;
             std::vector<double> maxValues;
-            std::vector<double> stepValues;
+            std::vector<int> stepValues;
             std::vector<std::string> singleValues;
             std::vector<vector<double> > setValues;
             std::vector<int> numParticleSet;
@@ -92,8 +92,6 @@ namespace sivelab
             string solver_name;
 
             logger log;
-
-
 
     };
 }

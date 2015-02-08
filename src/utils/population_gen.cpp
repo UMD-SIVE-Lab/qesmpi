@@ -8,7 +8,7 @@ populationGenerator::populationGenerator(population full_pop_)
 populationGenerator::populationGenerator(vector <double> min_domain_ , vector<double> max_domain_ , vector<int> steps_, vector <vector<double > > setvalues_)
 {
 
-    log = logger(DEBUG, "populationGenerator");
+    log = logger(ERROR, "populationGenerator");
 
     log.debug("ENTERD THE POPULATION GENERATOR CONSTRUCTOR");
     min_domain = min_domain_;
@@ -29,8 +29,10 @@ populationGenerator::populationGenerator(vector <double> min_domain_ , vector<do
     int num_samples = 1;
 
     //std::cout<<"size of domain"<<min_domain.size()<<"cout the size of steps"<<steps.size();
-    for ( unsigned int i = 0; i < min_domain.size(); i++ )
-        num_samples = num_samples * steps[i];
+    for ( unsigned int i = 0; i < min_domain.size(); i++ ){
+        long temp = (long)((max_domain[i] - min_domain[i]) / steps[i]) + 1;
+        num_samples = num_samples * temp;
+    }
 
     for ( unsigned int i = 0; i < setValues.size(); i++ )
         num_samples = num_samples * setValues.at(i).size();
@@ -158,7 +160,7 @@ population populationGenerator::generate_entire_pop()
 
     if ((min_domain.size() + setValues.size()) == 0)
     {
-        std::cerr << "withing populationGenerator the proper constructor has not been called so cannot generate_Entire_pop" << std::endl;
+        log.error("withing populationGenerator the proper constructor has not been called so cannot generate_Entire_pop");
         exit(1);
 
     }
@@ -203,8 +205,8 @@ population populationGenerator::generate_entire_pop()
             if (dim_inc < min_domain.size())
             {
                 //  std::cout<<"should have reached here"<<std::endl;
-                s[dim_inc] +=
-                    ( max_domain[dim_inc] - min_domain[dim_inc] ) / (steps[dim_inc] - 1);
+                s[dim_inc] += steps[dim_inc];
+                    //( max_domain[dim_inc] - min_domain[dim_inc] ) / (steps[dim_inc] - 1);
 
                 if ( s[dim_inc] <= max_domain[dim_inc] )
                 {
