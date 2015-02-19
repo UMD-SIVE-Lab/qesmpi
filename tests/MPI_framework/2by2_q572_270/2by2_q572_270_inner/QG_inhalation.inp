@@ -1,0 +1,7 @@
+!QUIC 5.72
+15			!Breathing Rate (L/min)
+50			!Percent of Mouth Breathers in population
+50			!Percent of Nose Breathers (Augmentors) in population
+1			!number of particle size bins for concentrations
+!Bin upper limit (microns)   Extra-Thoracic Depositon Fraction   Tracheobronchial Depositon Fraction   Pulmonary Depositon Fraction
+10   0.6823    0.0634    0.129

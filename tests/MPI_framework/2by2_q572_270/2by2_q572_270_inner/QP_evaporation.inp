@@ -1,0 +1,24 @@
+!QUIC 5.72
+!Bio-slurry properties
+0.1 	!Solids concentration(g solids/cm^3)
+0.8 	!Effective dry solids density (g/cm^3)
+!2-Phase properties
+1 	!2-phase initial droplet fraction
+4.3e-08 	!Mean free path of evaporating substance (m)
+18.015 	!Molecular weight (g/mol)
+0.001 	!Liquid dynamic viscosity (Pa*s)
+218 	!Critical pressure (atm)
+647 	!Critical temperature (K)
+373.15 	!Boiling temperature @ 1 atm (K)
+1 	!Liquid density (g/cm^3)
+12.7 	!Atomic volume of agent (see Fuller et al. 1966)
+1.03 	!Surface tension coefficient (erg/K)
+0 	!Contact angle (degrees)
+!Other parameters 
+1 	!Sticking efficiency
+1 	!Thermal accomodation
+1 	!Atmospheric pressure (atm)
+2 	!Number of levels in met profile
+!Height (m), Temperature (K), Relative Humidity
+2 293 0.3
+10 292.2 0.3

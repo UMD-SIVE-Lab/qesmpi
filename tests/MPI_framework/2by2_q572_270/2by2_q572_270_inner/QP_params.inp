@@ -1,0 +1,35 @@
+!QUIC 5.72
+1			!Source type flag (1 = Basic, 2 = Dense Gas, 3 = Distributed Particle Size, 4 = Explosive, 5 = ERAD source, 6 = Bio Slurry, 7 = 2-phase, 8 = Exfiltration)
+0			!normal QUIC (isitefl=0) or sensor siting (=1) mode
+0			!indoor calculations turned off (=0) or turned on (=1)
+1			!1 - inner grid, 2 - outer grid
+0			!Location of western edge of inner grid relative to outer grid (m)
+0			!Location of southern edge of inner relative to outer grid (m)
+0.1			!Wall Surface Roughness Length (m)
+0			!Reciprocal Monin-Obukhov length(1/m)
+2000			!Boundary Layer height (m)
+1			!use 1 to enable non-local mixing
+0			!use 1 to enable use of QUIC-CFD turbulence
+501000			!number of particles released over entire simulation
+1			!Number of particle distribution flag (1 = by mass, 2 = by source)
+0			!Particle splitting flag
+0			!Particle recycling flag
+1			!Total particle number increase factor
+2			!Number of particles a particle is split into
+1e-06			!Particle splitting target dose (gs/m^3)
+0			!Enable Taylor microscale lower limit to sub-time steps
+-100			!Random number seed
+0.1			!time step (s)
+150			!duration (s)
+120			!concentration averaging time (s)
+30			!starting time for concentration averaging (s)
+150			!particle output period (s)
+30			!in x direction, # of collecting boxes (concentration grid cells) 
+30			!in y direction, # of collecting boxes (concentration grid cells) 
+15			!in z direction, # of collecting boxes (concentration grid cells) 
+20			!lower limits for collecting boxes in x in meters
+50			!upper limits for collecting boxes in x direction in meters
+15			!lower limits for collecting boxes in y in meters
+45			!upper limits for collecting boxes in y direction in meters
+0			!lower limits for collecting boxes in z in meters
+15			!upper limits for collecting boxes in z direction in meters

@@ -1,8 +1,9 @@
 cmake_minimum_required (VERSION 2.8) 
 project (optimizationCode)
 
-
-SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/../libsivelab")
+#Matt has his own version of libsivelab I am also using that since using a seperate once
+#is resulting in naming colissions. 
+SET(LIBSIVELAB_PATH "${CMAKE_SOURCE_DIR}/lib/quic_envsim/lib/libsivelab")
 SET(QUIC_DATA_PATH "${CMAKE_SOURCE_DIR}/../quicdata")
 SET(QES_ROOT_DIR "${CMAKE_SOURCE_DIR}/../quic_envsim")
 SET(GMOCK_SOURCE_DIR "${CMAKE_SOURCE_DIR}/lib/gmock")
@@ -13,13 +14,14 @@ set(BUILD_LIBS_ONLY "TRUE")
 #Build unit tests
 set(BUILD_TESTS "TRUE")
 
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+#set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 #Setting compiler to use C++11
 SET (DEFAULT_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 SET (CMAKE_CXX_FLAGS "${DEFAULT_CXX_FLAGS} -std=c++11")
-SET (CMAKE_BUILD_TYPE RELEASE)
+SET (CMAKE_BUILD_TYPE Debug)
 message(STATUS "###Adding lib directory###")
 add_subdirectory(lib)
 

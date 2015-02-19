@@ -310,6 +310,9 @@ ostream &operator<<( ostream &os, population &p )
         os << i << ": " << p[i] << endl;
     os << "--------------------" << endl;
 }
+/**
+* returns the sample number that will be the first sample in the next subset
+*/
 
 int population::get_subset(int start_pos, int size, population &pop)
 {

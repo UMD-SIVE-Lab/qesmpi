@@ -1,0 +1,11 @@
+!QUIC 5.72
+0.000270581			!latitude in decimal degrees
+-181.488			!longitude in decimal degrees (western longititudes are negative)
+0			!local standard time, decimal hours with noon as 12.0
+1			!day of the year with January 1 as 1
+0.2			!representative albedo as a decimal fraction
+0			!mean surface elevation in meters above sea-level
+1			!maximum decay rate (%/min)
+0.1			!minimum decay rate (%/min)
+1			!surface pressure in atm
+0			!number of cloud types there are nine possible

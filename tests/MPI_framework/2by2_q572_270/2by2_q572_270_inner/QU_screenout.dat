@@ -1,0 +1,73 @@
+ Lx =    80.00000     Ly =    60.00000     Lz =    20.00000    
+ subdomain southwest corner x coordinate  0.0000000E+00
+ subdomain southwest corner y coordinate  0.0000000E+00
+ subdomain northeast corner x coordinate   80.00000    
+ subdomain northeast corner y coordinate   60.00000    
+ dx =    1.000000    
+ dy =    1.000000    
+ dz =    1.000000    
+ 
+ building #             1   building type             1
+ Height   Width   Length   xfo   yfo   zfo   gamma   AttenCoef
+ 10.00   10.00   10.00   20.00   40.00    0.00    0.00    0.00
+ 
+ building #             2   building type             1
+ Height   Width   Length   xfo   yfo   zfo   gamma   AttenCoef
+ 10.00   10.00   10.00   40.00   40.00    0.00    0.00    0.00
+ 
+ building #             3   building type             1
+ Height   Width   Length   xfo   yfo   zfo   gamma   AttenCoef
+ 10.00   10.00   10.00   40.00   20.00    0.00    0.00    0.00
+ 
+ building #             4   building type             1
+ Height   Width   Length   xfo   yfo   zfo   gamma   AttenCoef
+ 10.00   10.00   10.00   20.00   20.00    0.00    0.00    0.00
+ 
+ upstream winds:
+ uo   2.894129    
+ vo -1.2650636E-07
+ D =    8.000000       zo =   0.1000000    
+ ibuild,istart(ibuild),iend(ibuild),jstart(ibuild),jend(ibuild)
+           1          21          30          16          25
+   5.000000       10.00000       5.000000    
+ ibuild,istart(ibuild),iend(ibuild),jstart(ibuild),jend(ibuild)
+           3          41          50          36          45
+   5.000000       10.00000       5.000000    
+ ibuild,istart(ibuild),iend(ibuild),jstart(ibuild),jend(ibuild)
+           4          21          30          36          45
+   5.000000       10.00000       5.000000    
+ ibuild,istart(ibuild),iend(ibuild),jstart(ibuild),jend(ibuild)
+           2          41          50          16          25
+   5.000000       10.00000       5.000000    
+ Theta =    270.0000       Phi =   0.0000000E+00   phip =   0.0000000E+00
+ Weff =    10.00000    
+ Leff =    10.00000    
+ Wti =    10.00000    
+ Lti =    10.00000    
+ 
+ Lf =   8.333334    
+ Lr =   14.51613    
+ Theta =    270.0000       Phi =   0.0000000E+00   phip =   0.0000000E+00
+ Weff =    10.00000    
+ Leff =    10.00000    
+ Wti =    10.00000    
+ Lti =    10.00000    
+ 
+ Lf =   8.333334    
+ Lr =   14.51613    
+ Theta =    270.0000       Phi =   0.0000000E+00   phip =   0.0000000E+00
+ Weff =    10.00000    
+ Leff =    10.00000    
+ Wti =    10.00000    
+ Lti =    10.00000    
+ 
+ Lf =   8.333334    
+ Lr =   14.51613    
+ Theta =    270.0000       Phi =   0.0000000E+00   phip =   0.0000000E+00
+ Weff =    10.00000    
+ Leff =    10.00000    
+ Wti =    10.00000    
+ Lti =    10.00000    
+ 
+ Lf =   8.333334    
+ Lr =   14.51613    

@@ -1,0 +1,30 @@
+!QUIC 5.72
+Ideal Gas
+0.000000e+00	!Decay rate (percent/min)
+0.000000e+00	!Mass median diameter (micron)
+0.000000e+00	!Deposition velocity (cm/s)
+1	!Toxic load exponent
+0	!Number of airborne toxic load thresholds
+!Toxic Load(s[g/m^3]^n)  Fraction(%)  Label
+4	!Number of airborne dosage thresholds
+!Dosage(gs/m^3)  Fraction(%)  Label
+1.000000e+01	!9.000000e+01!lct90
+1.000000e+00	!5.000000e+01!lct50
+1.000000e-01	!5.000000e+01!ict50
+1.000000e-03	!5.000000e+00!ict05
+1	!Internal Dose conversion factor (converts from grams to specified units)
+g !Internal Dose units
+0	!Number of airborne internal dose thresholds
+!Internal Dose(g)  Fraction(%)  Label
+0	!Number of surface flux thresholds
+!Flux(g/m^2)  Fraction(%)  Label
+0	!Number of airborne toxic load probit response curves
+!Label, Population Fraction (%), toxic load (s[g/m^3]^n), probit slope
+2	!Number of airborne dosage probit response curves
+!Label, Population Fraction (%), Dosage (gs/m^3), probit slope
+LCT, 50, 1, 1.2816
+ICT, 50, 0.001, 0.8224
+0	!Number of airborne internal dose probit response curves
+!Label, Population Fraction (%), Dose (g), probit slope
+0	!Number of deposition flux response curves
+!Label, Population Fraction (%), Dosage (gs/m^3), probit slope
