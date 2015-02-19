@@ -24,11 +24,12 @@ void Fitness::fetchPatchIds(qes::QESContext* context){
 	float dy = quqpData.dy;
 
 	//somehow fetch these from optparams
+	//Nope they will be given by the person who writes this file!
 	float left = 30;
 	float bottom = 25;
 	float right = 40;
 	float top = 35;
-	cout<<nx<<" "<<ny<<" "<<dx<<" "<<dy<<endl;
+//	cout<<nx<<" "<<ny<<" "<<dx<<" "<<dy<<endl;
 
 	if(dx<=0 || dy<=0)
 		return;
