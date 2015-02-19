@@ -18,6 +18,10 @@
 #include "fitness_function.h"
 #include <dlfcn.h>
 
+
+#ifndef FITNESS_FUNCTION_LIBRARY
+#define FITNESS_FUNCTION_LIBRARY "../fitness_lib/libfitness.so"
+#endif
 namespace  sivelab
 {
     class job

@@ -1,10 +1,14 @@
 #include "MPI_framework/job.h"
 using namespace sivelab;
 
+//Change the optimizingDir as per the sample
 string job::prepare_work_dir_for_sample(sample &s)
 {
 
-
+    //TODO change this
+    //magic! workdir.outputDir is set in 
+    //workDir.intialRun(output_location + "/optimizingDir", output_location + "/localBaseCopy/local_inner/", quqpData, "local.proj");
+    //at this point it is output_location + "/optimizingDir"
 
     std::string outputDir = workDir.outputDir;
     ///TODO  single values are being handled
@@ -226,6 +230,7 @@ string job::prepare_work_dir_for_sample(sample &s)
 {
     bool environment_ready;
     this->output_location = output_location;
+    //set the base inner project 
     string baseproj_inner_path = optParams.baseproj_inner_path;
     log.debug("Base proj inner path", baseproj_inner_path);
     
@@ -238,43 +243,61 @@ string job::prepare_work_dir_for_sample(sample &s)
         ///this is the Project file that holds all the quic Data
         std::string quicFilesPath = baseproj_inner_path + "/";
         log.debug(__LINE__, "Begin initializing quicProjec path\n");
+        //read all quic project data into ququpData
         quqpData.initialize_quicProjecPath(quicFilesPath);
         log.debug(__LINE__, "End initializing quicProjec path\n");
         log.debug(__LINE__, "Begin building map\n");
+        //build a map of quicdata
         quqpData.build_map();
         log.debug(__LINE__, "End building map\n");
 
 
         //creating a copy of default/origional quic project files
-        //mpi might create different processes on same machine so to avoid conflict make dirs with its rank
+        //TODO mpi might create different processes on same machine so to avoid conflict make dirs with its rank
         log.debug("creating local copy of project");
+        
         log.debug("creating output location", output_location.c_str());
         mkdir(output_location.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+        
         log.debug("creating local base copy", (output_location + "/localBaseCopy").c_str());
         mkdir((output_location + "/localBaseCopy").c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+        
+        //there is only one proj file for both inner and outer
         std::string projFileName = searchForPROJFile(baseproj_inner_path + "/..");
         log.debug(__LINE__, "Begin writing out quic files / copying files\n");
         log.debug("copying proj file: from ", quicFilesPath + "../" + projFileName, "to", output_location + "/localBaseCopy/local.proj");
         copyFile(quicFilesPath + "../" + projFileName, output_location + "/localBaseCopy/local.proj");
 
+        //copy the inner directory
         log.debug("creating local inner dir", (output_location + "/localBaseCopy/local_inner").c_str());
         mkdir((output_location + "/localBaseCopy/local_inner").c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
         ///copy all files to the local thingy .
         //bruteforce but later on replace quicProject
+        
         std::string local_inner = output_location + "/localBaseCopy/local_inner/";
+        
         log.debug("Local inner path", local_inner);
         quqpData.quBuildingData.writeQUICFile(local_inner + "/QU_buildings.inp");
+        
         copyFile(quicFilesPath + "QU_fileoptions.inp", local_inner + "/QU_fileoptions.inp");
         copyFile(quicFilesPath + "QU_landuse.inp", local_inner + "/QU_landuse.inp");
+        
         quqpData.quMetParamData.writeQUICFile(local_inner + "/QU_metparams.inp");
+        
         quqpData.quSimParamData.writeQUICFile(local_inner + "/QU_simparams.inp");
+        
         quqpData.quMetParamData.quSensorData.writeQUICFile(local_inner + "/sensor1.inp");
+        
         copyFile(quicFilesPath + projFileName.substr(0, projFileName.length() - 5) + ".info", local_inner + "/local.info");
         copyFile(quicFilesPath + "QP_materials.inp", local_inner + "/QP_materials.inp");
         copyFile(quicFilesPath + "QP_indoor.inp", local_inner + "/QP_indoor.inp");
+        
         quqpData.qpSourceData.writeQUICFile(local_inner + "/QP_source.inp");
+        
         copyFile(quicFilesPath + "QP_fileoptions.inp", local_inner + "/QP_fileoptions.inp");
+        
         quqpData.qpParamData.writeQUICFile(local_inner + "/QP_params.inp");
+        
         quqpData.qpBuildoutData.writeQUICFile(local_inner + "/QP_buildout.inp");
 
         ////////////////////////////////TODO TODO important ask if needed
