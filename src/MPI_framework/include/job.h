@@ -20,7 +20,7 @@
 
 
 #ifndef FITNESS_FUNCTION_LIBRARY
-#define FITNESS_FUNCTION_LIBRARY "../fitness_lib/libfitness.so"
+#define FITNESS_FUNCTION_LIBRARY "../lib/libfitness.so"
 #endif
 namespace  sivelab
 {
